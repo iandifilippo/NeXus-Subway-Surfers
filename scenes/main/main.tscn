@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://cd5qqqvvu536q" path="res://scenes/chunks/ground_chunk.tscn" id="1_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://ga5f26agc7p7" path="res://scenes/player/player.tscn" id="1_o5qli"]
-[ext_resource type="Script" uid="uid://0apeneven5m1" path="res://scenes/main.gd" id="1_sugp2"]
+[ext_resource type="Script" uid="uid://0apeneven5m1" path="res://scenes/main/main.gd" id="1_sugp2"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_etmoi"]
 
