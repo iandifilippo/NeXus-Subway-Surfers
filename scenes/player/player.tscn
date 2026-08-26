@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://ga5f26agc7p7"]
 
 [ext_resource type="Texture2D" uid="uid://dusdc7i70e41n" path="res://assets/models/player/IMG_2483.png" id="1_dovo2"]
+[ext_resource type="Script" uid="uid://ct8nu4bahvqnc" path="res://scenes/player/player.gd" id="1_gmlin"]
 [ext_resource type="ArrayMesh" uid="uid://bas22onscfpfd" path="res://assets/models/player/Jake.obj" id="2_gmlin"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6vens"]
@@ -12,6 +13,7 @@ radius = 0.4
 height = 1.8
 
 [node name="Player" type="CharacterBody3D" unique_id=194294277]
+script = ExtResource("1_gmlin")
 
 [node name="Model" type="Node3D" parent="." unique_id=1324166027]
 transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0, 0, 0)
