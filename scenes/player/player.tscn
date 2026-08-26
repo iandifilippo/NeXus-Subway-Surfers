@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://ga5f26agc7p7"]
+
+[ext_resource type="Texture2D" uid="uid://dusdc7i70e41n" path="res://assets/models/player/IMG_2483.png" id="1_dovo2"]
+[ext_resource type="ArrayMesh" uid="uid://bas22onscfpfd" path="res://assets/models/player/Jake.obj" id="2_gmlin"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6vens"]
+albedo_texture = ExtResource("1_dovo2")
+metallic_specular = 0.0
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_cnqkh"]
+radius = 0.4
+height = 1.8
+
+[node name="Player" type="CharacterBody3D" unique_id=194294277]
+
+[node name="Model" type="Node3D" parent="." unique_id=1324166027]
+transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Model" unique_id=91883983]
+material_override = SubResource("StandardMaterial3D_6vens")
+mesh = ExtResource("2_gmlin")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=354956226]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_cnqkh")
