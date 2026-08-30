@@ -1,11 +1,11 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://c7iuwi66n2k2b"]
 
 [sub_resource type="StandardMaterial3D" id="StdMat_wire"]
 albedo_color = Color(0.08, 0.08, 0.09, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_wire"]
 material = SubResource("StdMat_wire")
-size = Vector3(10, 0.04, 0.04)
+size = Vector3(200, 0.04, 0.04)
 
-[node name="WireSegment" type="MeshInstance3D"]
+[node name="WireSegment" type="MeshInstance3D" unique_id=354388808]
 mesh = SubResource("BoxMesh_wire")
