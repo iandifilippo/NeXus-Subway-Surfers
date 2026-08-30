@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3]
+
+[sub_resource type="StandardMaterial3D" id="StdMat_bush"]
+albedo_color = Color(0.29, 0.62, 0.24, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bush"]
+material = SubResource("StdMat_bush")
+size = Vector3(1.2, 0.8, 60)
+
+[node name="BushStrip" type="MeshInstance3D"]
+mesh = SubResource("BoxMesh_bush")

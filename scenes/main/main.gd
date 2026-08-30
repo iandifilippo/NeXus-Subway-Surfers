@@ -42,6 +42,7 @@ func _process(delta: float) -> void:
 
 	for chunk in chunks:
 		chunk.position.z += step
+	for chunk in chunks:
 		if chunk.position.z > CHUNK_LENGTH:
 			recycle(chunk)
 

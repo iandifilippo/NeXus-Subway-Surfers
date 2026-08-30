@@ -1,6 +1,13 @@
-[gd_scene format=3 uid="uid://dqvddneni7fxa"]
+[gd_scene load_steps=5 format=3 uid="uid://dqvddneni7fxa"]
+
+[ext_resource type="Texture2D" path="res://assets/textures/obstacle_stripes.png" id="1_tex"]
+
+[sub_resource type="StandardMaterial3D" id="StdMat_bar"]
+albedo_texture = ExtResource("1_tex")
+uv1_scale = Vector3(2, 1, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_cnqkh"]
+material = SubResource("StdMat_bar")
 size = Vector3(1.6, 0.8, 0.4)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_lewmy"]

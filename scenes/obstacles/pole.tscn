@@ -1,6 +1,13 @@
-[gd_scene format=3 uid="uid://dayoep24lm2dh"]
+[gd_scene load_steps=5 format=3 uid="uid://dayoep24lm2dh"]
+
+[ext_resource type="Texture2D" path="res://assets/textures/obstacle_stripes.png" id="1_tex"]
+
+[sub_resource type="StandardMaterial3D" id="StdMat_pole"]
+albedo_texture = ExtResource("1_tex")
+uv1_scale = Vector3(1, 4, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_cnqkh"]
+material = SubResource("StdMat_pole")
 size = Vector3(0.3, 3, 0.3)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_lewmy"]

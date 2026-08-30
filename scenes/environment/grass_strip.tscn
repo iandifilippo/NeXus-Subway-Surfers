@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3]
+
+[sub_resource type="StandardMaterial3D" id="StdMat_grass"]
+albedo_color = Color(0.33, 0.66, 0.27, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_grass"]
+material = SubResource("StdMat_grass")
+size = Vector3(2, 0.3, 60)
+
+[node name="GrassStrip" type="MeshInstance3D"]
+mesh = SubResource("BoxMesh_grass")
