@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://coq4mi5hlnxj8"]
+
+[ext_resource type="Texture2D" path="res://assets/textures/obstacle_stripes.png" id="1_tex"]
+
+[sub_resource type="StandardMaterial3D" id="StdMat_fence"]
+albedo_texture = ExtResource("1_tex")
+uv1_scale = Vector3(2, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_cnqkh"]
+material = SubResource("StdMat_fence")
+size = Vector3(1.6, 0.8, 0.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lewmy"]
+size = Vector3(1.6, 0.8, 0.4)
+
+[node name="Obstacle" type="Area3D" unique_id=1720722703 groups=["obstacle"]]
+collision_layer = 4
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=594956829]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+mesh = SubResource("BoxMesh_cnqkh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=799879611]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+shape = SubResource("BoxShape3D_lewmy")

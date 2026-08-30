@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://d3kgu0idfjw4"]
+
+[ext_resource type="PackedScene" uid="uid://ga5f26agc7p7" path="res://scenes/player/player.tscn" id="1_o5qli"]
+[ext_resource type="Script" uid="uid://0apeneven5m1" path="res://scenes/main/main.gd" id="1_sugp2"]
+[ext_resource type="PackedScene" uid="uid://b2jrbsxgpu238" path="res://scenes/ui/game_over.tscn" id="3_k2fmo"]
+[ext_resource type="PackedScene" uid="uid://ca6vqiswrfofb" path="res://scenes/ui/hud.tscn" id="4_l3cfh"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_etmoi"]
+
+[sub_resource type="Sky" id="Sky_lewmy"]
+sky_material = SubResource("ProceduralSkyMaterial_etmoi")
+
+[sub_resource type="Environment" id="Environment_cnqkh"]
+background_mode = 2
+sky = SubResource("Sky_lewmy")
+ambient_light_source = 3
+ambient_light_color = Color(0.55, 0.55, 0.6, 1)
+ambient_light_energy = 0.9
+fog_light_color = Color(0.31865796, 0.58801365, 0.7217603, 1)
+fog_density = 0.04
+
+[node name="Main" type="Node3D" unique_id=63783287]
+script = ExtResource("1_sugp2")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=748110504]
+environment = SubResource("Environment_cnqkh")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1386271256]
+transform = Transform3D(0.8660254, 0.38302222, -0.32139382, 0, 0.64278764, 0.76604444, 0.5, -0.66341394, 0.5566704, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1817799747]
+transform = Transform3D(1, 0, 0, 0, 0.9659258, 0.25881904, 0, -0.25881904, 0.9659258, 0, 3.5, 6)
+
+[node name="Player" parent="." unique_id=194294277 instance=ExtResource("1_o5qli")]
+
+[node name="GameOver" parent="." unique_id=1999420787 instance=ExtResource("3_k2fmo")]
+
+[node name="HUD" parent="." unique_id=2063382571 instance=ExtResource("4_l3cfh")]

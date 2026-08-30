@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://c873q1oaoxc0k"]
+
+[ext_resource type="Texture2D" uid="uid://b1hpgitn0ipek" path="res://assets/textures/tunnel_wall.png" id="1_tex"]
+
+[sub_resource type="StandardMaterial3D" id="StdMat_wall"]
+albedo_texture = ExtResource("1_tex")
+uv1_scale = Vector3(10, 3, 1)
+texture_filter = 0
+
+[sub_resource type="BoxMesh" id="BoxMesh_wall"]
+material = SubResource("StdMat_wall")
+size = Vector3(1, 5, 200)
+
+[node name="WallSegment" type="MeshInstance3D" unique_id=1763809307]
+mesh = SubResource("BoxMesh_wall")
