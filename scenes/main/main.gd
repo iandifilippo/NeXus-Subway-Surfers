@@ -216,11 +216,13 @@ func spawn_coins() -> void:
 		# Zigzag: obliga a cambiar de carril cada tres monedas.
 		"zigzag":
 			for i in 9:
+				@warning_ignore("integer_division")
 				var l: int = clampi(lane + (i / 3) % 3 - 1, 0, 2)
 				try_place_coin(l, SPAWN_Z - i * COIN_SPACING)
 		# Escalera: desplazamiento progresivo hacia un lado.
 		"stairs":
 			for i in 6:
+				@warning_ignore("integer_division")
 				var l: int = clampi(lane + i / 2, 0, 2)
 				try_place_coin(l, SPAWN_Z - i * COIN_SPACING)
 
