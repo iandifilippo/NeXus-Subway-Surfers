@@ -4,7 +4,8 @@
 ## y es este script el que mueve el mundo entero hacia él (+Z). Esto evita
 ## acumular coordenadas enormes (que degradan la precisión de los float en
 ## partidas largas), permite reusar un pool fijo de nodos, y hace que la
-## cámara no necesite lógica de seguimiento.
+## cámara no necesite lógica de seguimiento EN PROFUNDIDAD (eje Z) — solo
+## necesita seguir al jugador de lado a lado (eje X) cuando cambia de carril.
 extends Node3D
 
 ## --- Terreno ---
@@ -56,8 +57,25 @@ const SPAWN_GAP := 18.0   ## Metros entre grupos de obstáculos.
 const DESPAWN_Z := 15.0   ## Pasado este punto ya quedaron detrás de la cámara
 						  ## y se eliminan para no acumular nodos.
 
+## --- Seguimiento lateral de la cámara ---
+const CAMERA_FOLLOW_AMOUNT := 0.6  ## Qué tanto se mueve la cámara respecto
+									## al jugador. 1.0 = la sigue exacto
+									## (igual de rápido, mismo carril),
+									## 0.0 = no se mueve nunca. 0.6 hace que
+									## se note el movimiento sin que la
+									## cámara "gire" bruscamente de golpe.
+const CAMERA_FOLLOW_SPEED := 4.0   ## Qué tan rápido "alcanza" la cámara al
+									## objetivo. Es la velocidad del lerp:
+									## más alto = reacciona casi al instante,
+									## más bajo = se queda atrás con un
+									## trotecito perceptible detrás del
+									## jugador (ese es el efecto que
+									## buscamos, un seguimiento "leve").
+
 @onready var game_over: Control = $GameOver
 @onready var hud: Control = $HUD
+@onready var camera: Camera3D = $Camera3D
+@onready var player: CharacterBody3D = $Player
 
 ## --- Estado de la partida ---
 var speed := START_SPEED       ## Velocidad actual del mundo.
@@ -139,6 +157,17 @@ func _process(delta: float) -> void:
 		spawn_coins()
 		next_coin_spawn = COIN_GAP
 
+	# --- Seguimiento lateral de la cámara ---
+	# La cámara NO es hija del jugador (evitamos así el problema de que
+	# choque contra su propia cápsula de colisión, que fue justo lo que
+	# rompió el intento anterior con SpringArm3D). En su lugar, cada frame
+	# la acercamos un poco más hacia una posición X calculada a partir de
+	# dónde está el jugador, con lerp(): eso da un seguimiento suave, con
+	# un pequeño retraso natural, en vez de un salto brusco o un enganche
+	# rígido 1 a 1.
+	var camera_target_x := player.position.x * CAMERA_FOLLOW_AMOUNT
+	camera.position.x = lerp(camera.position.x, camera_target_x, CAMERA_FOLLOW_SPEED * delta)
+
 	hud.update_hud(coins, distance)
 
 
@@ -216,12 +245,17 @@ func spawn_coins() -> void:
 		# Zigzag: obliga a cambiar de carril cada tres monedas.
 		"zigzag":
 			for i in 9:
+				# La división entera es intencional: agrupa las monedas
+				# de a 3 en 3 para el patrón en zigzag. Por eso se silencia
+				# el aviso de "integer division" en vez de cambiarla.
 				@warning_ignore("integer_division")
 				var l: int = clampi(lane + (i / 3) % 3 - 1, 0, 2)
 				try_place_coin(l, SPAWN_Z - i * COIN_SPACING)
 		# Escalera: desplazamiento progresivo hacia un lado.
 		"stairs":
 			for i in 6:
+				# Misma razón: división entera intencional, agrupa de a 2
+				# para que el desplazamiento avance cada dos monedas.
 				@warning_ignore("integer_division")
 				var l: int = clampi(lane + i / 2, 0, 2)
 				try_place_coin(l, SPAWN_Z - i * COIN_SPACING)
