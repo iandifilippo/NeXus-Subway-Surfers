@@ -33,10 +33,13 @@ signal died            ## Se emite al chocar con un obstáculo. Termina la parti
 signal coin_collected  ## Se emite al recoger una moneda. main.gd suma +1.
 
 ## --- Estado interno ---
-var current_lane := 1     ## 0 = izquierda, 1 = centro, 2 = derecha.
-var is_rolling := false   ## true mientras dura el roll.
-var roll_timer := 0.0     ## Cuenta atrás del roll en segundos.
-var is_dead := false      ## Evita procesar más colisiones tras morir.
+var current_lane := 1
+var is_rolling := false
+var roll_timer := 0.0
+var is_dead := false
+var is_jumping := false   ## true desde que se pulsa saltar hasta aterrizar.
+						  ## No usamos solo is_on_floor() porque tarda un frame
+						  ## en actualizarse y permitiría saltos dobles.
 
 ## Medidas de la cápsula de pie. Se guardan al arrancar para poder
 ## restaurarlas después de encogerla durante el roll.
@@ -65,14 +68,14 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("move_right"):
 		# mini() evita pasarse del último carril.
 		current_lane = mini(current_lane + 1, LANE_COUNT - 1)
-	elif event.is_action_pressed("jump"):
+	elif event.is_action_pressed("jump") and not is_jumping:
 		if is_rolling:
-			# Saltar cancela el roll a medias (como en Subway Surfers).
 			cancel_roll()
+			is_jumping = true
 			velocity.y = JUMP_VELOCITY
 			start_jump()
 		elif is_on_floor():
-			# Solo se puede saltar desde el suelo (no hay doble salto).
+			is_jumping = true
 			velocity.y = JUMP_VELOCITY
 			start_jump()
 	elif event.is_action_pressed("roll") and not is_rolling:
@@ -108,8 +111,10 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 	# Si acabamos de tocar el suelo, volvemos a la animación de correr.
-	if was_airborne and is_on_floor() and not is_rolling:
-		anim.play(ANIM_RUN, 0.1, 1.0)
+	if was_airborne and is_on_floor():
+		is_jumping = false
+		if not is_rolling:
+			anim.play(ANIM_RUN, 0.1, 1.0)
 
 
 ## Arranca la animación de salto y la congela en el aire.
