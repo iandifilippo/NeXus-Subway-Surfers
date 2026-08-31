@@ -3,7 +3,26 @@
 ## el que se mueve hacia él (ver main.gd). Este script solo maneja
 ## el carril (X), el salto (Y) y la postura (agachado o de pie).
 extends CharacterBody3D
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+## Comentario para solucionar error del merge en GitHub
+=======
+
+>>>>>>> fda6fd6 (Agregué colisiones, monedas, HUD y el game over)
+=======
+
+=======
+## Comentario para solucionar error del merge en GitHub
+>>>>>>> c353c85 (Hice el cambio de la caida del jugador cuando salta y le agregue una springarm3D a la camara para que cuando el jugador se mueva la camara tambien lo haga y asi mejorar la vision del jugador y evitar que pierda cuando se encuentre con muchos obstaculos.)
+>>>>>>> 2f1d3bd (Hice el cambio de la caida del jugador cuando salta y le agregue una springarm3D a la camara para que cuando el jugador se mueva la camara tambien lo haga y asi mejorar la vision del jugador y evitar que pierda cuando se encuentre con muchos obstaculos.)
+=======
+
+>>>>>>> 98e6760 (Error de Git - Branch solucionado y eliminado, combinación de repo)
+>>>>>>> b8293d4 (Errores de depurador solucionados)
 ## --- Movimiento lateral ---
 const LANE_COUNT := 3      ## Número de carriles: izquierda, centro, derecha.
 const LANE_WIDTH := 2.0    ## Separación en metros entre carriles.
@@ -33,13 +52,53 @@ signal died            ## Se emite al chocar con un obstáculo. Termina la parti
 signal coin_collected  ## Se emite al recoger una moneda. main.gd suma +1.
 
 ## --- Estado interno ---
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+var current_lane := 1
+var is_rolling := false
+var roll_timer := 0.0
+var is_dead := false
+var is_jumping := false   ## true desde que se pulsa saltar hasta aterrizar.
+						  ## No usamos solo is_on_floor() porque tarda un frame
+						  ## en actualizarse y permitiría saltos dobles.
+=======
+=======
+>>>>>>> 2f1d3bd (Hice el cambio de la caida del jugador cuando salta y le agregue una springarm3D a la camara para que cuando el jugador se mueva la camara tambien lo haga y asi mejorar la vision del jugador y evitar que pierda cuando se encuentre con muchos obstaculos.)
+=======
+>>>>>>> 98e6760 (Error de Git - Branch solucionado y eliminado, combinación de repo)
+>>>>>>> b8293d4 (Errores de depurador solucionados)
 var current_lane := 1     ## 0 = izquierda, 1 = centro, 2 = derecha.
 var is_rolling := false   ## true mientras dura el roll.
 var roll_timer := 0.0     ## Cuenta atrás del roll en segundos.
 var is_dead := false      ## Evita procesar más colisiones tras morir.
+<<<<<<< HEAD
 var is_jumping := false   ## true desde que se pulsa saltar hasta aterrizar.
 						  ## No usamos solo is_on_floor() porque tarda un frame
 						  ## en actualizarse y permitiría saltos dobles.
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> fda6fd6 (Agregué colisiones, monedas, HUD y el game over)
+=======
+=======
+var current_lane := 1
+var is_rolling := false
+var roll_timer := 0.0
+var is_dead := false
+var is_jumping := false   ## true desde que se pulsa saltar hasta aterrizar.
+						  ## No usamos solo is_on_floor() porque tarda un frame
+						  ## en actualizarse y permitiría saltos dobles.
+>>>>>>> c353c85 (Hice el cambio de la caida del jugador cuando salta y le agregue una springarm3D a la camara para que cuando el jugador se mueva la camara tambien lo haga y asi mejorar la vision del jugador y evitar que pierda cuando se encuentre con muchos obstaculos.)
+>>>>>>> 2f1d3bd (Hice el cambio de la caida del jugador cuando salta y le agregue una springarm3D a la camara para que cuando el jugador se mueva la camara tambien lo haga y asi mejorar la vision del jugador y evitar que pierda cuando se encuentre con muchos obstaculos.)
+=======
+var is_jumping := false   ## true desde que se pulsa saltar hasta aterrizar.
+						  ## No usamos solo is_on_floor() porque tarda un frame
+						  ## en actualizarse y permitiría saltos dobles.
+>>>>>>> 98e6760 (Error de Git - Branch solucionado y eliminado, combinación de repo)
+>>>>>>> b8293d4 (Errores de depurador solucionados)
 
 ## Medidas de la cápsula de pie. Se guardan al arrancar para poder
 ## restaurarlas después de encogerla durante el roll.
@@ -64,8 +123,31 @@ func _unhandled_input(event: InputEvent) -> void:
 		current_lane = maxi(current_lane - 1, 0)
 	elif event.is_action_pressed("move_right"):
 		current_lane = mini(current_lane + 1, LANE_COUNT - 1)
+<<<<<<< HEAD
 	elif event.is_action_pressed("jump") and not is_jumping:
 		if is_rolling:
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+	elif event.is_action_pressed("jump") and not is_jumping:
+		if is_rolling:
+			cancel_roll()
+			is_jumping = true
+			velocity.y = JUMP_VELOCITY
+			start_jump()
+		elif is_on_floor():
+			is_jumping = true
+=======
+=======
+>>>>>>> 2f1d3bd (Hice el cambio de la caida del jugador cuando salta y le agregue una springarm3D a la camara para que cuando el jugador se mueva la camara tambien lo haga y asi mejorar la vision del jugador y evitar que pierda cuando se encuentre con muchos obstaculos.)
+	elif event.is_action_pressed("jump"):
+		if is_rolling:
+=======
+	elif event.is_action_pressed("jump") and not is_jumping:
+		if is_rolling:
+>>>>>>> 98e6760 (Error de Git - Branch solucionado y eliminado, combinación de repo)
+>>>>>>> b8293d4 (Errores de depurador solucionados)
 			# Saltar cancela el roll a medias (como en Subway Surfers).
 			cancel_roll()
 			is_jumping = true
@@ -73,9 +155,32 @@ func _unhandled_input(event: InputEvent) -> void:
 			start_jump()
 		elif is_on_floor():
 			# Solo se puede saltar desde el suelo (no hay doble salto).
+<<<<<<< HEAD
 			is_jumping = true
 			velocity.y = JUMP_VELOCITY
 			start_jump()
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> fda6fd6 (Agregué colisiones, monedas, HUD y el game over)
+=======
+=======
+	elif event.is_action_pressed("jump") and not is_jumping:
+		if is_rolling:
+			cancel_roll()
+			is_jumping = true
+			velocity.y = JUMP_VELOCITY
+			start_jump()
+		elif is_on_floor():
+			is_jumping = true
+>>>>>>> c353c85 (Hice el cambio de la caida del jugador cuando salta y le agregue una springarm3D a la camara para que cuando el jugador se mueva la camara tambien lo haga y asi mejorar la vision del jugador y evitar que pierda cuando se encuentre con muchos obstaculos.)
+>>>>>>> 2f1d3bd (Hice el cambio de la caida del jugador cuando salta y le agregue una springarm3D a la camara para que cuando el jugador se mueva la camara tambien lo haga y asi mejorar la vision del jugador y evitar que pierda cuando se encuentre con muchos obstaculos.)
+=======
+			is_jumping = true
+>>>>>>> 98e6760 (Error de Git - Branch solucionado y eliminado, combinación de repo)
+			velocity.y = JUMP_VELOCITY
+			start_jump()
+>>>>>>> b8293d4 (Errores de depurador solucionados)
 	elif event.is_action_pressed("roll") and not is_rolling:
 		start_roll()
 		if not is_on_floor():
@@ -97,11 +202,41 @@ func _physics_process(delta: float) -> void:
 	velocity.y += get_gravity().y * delta
 	move_and_slide()
 
+<<<<<<< HEAD
 	# Al aterrizar liberamos el bloqueo del salto y volvemos a correr.
+=======
+<<<<<<< HEAD
+	# Si acabamos de tocar el suelo, volvemos a la animación de correr.
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	# Al aterrizar liberamos el bloqueo del salto y volvemos a correr.
+>>>>>>> 98e6760 (Error de Git - Branch solucionado y eliminado, combinación de repo)
+>>>>>>> b8293d4 (Errores de depurador solucionados)
 	if was_airborne and is_on_floor():
 		is_jumping = false
 		if not is_rolling:
 			anim.play(ANIM_RUN, 0.1, 1.0)
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+	if was_airborne and is_on_floor() and not is_rolling:
+		anim.play(ANIM_RUN, 0.1, 1.0)
+>>>>>>> fda6fd6 (Agregué colisiones, monedas, HUD y el game over)
+=======
+	if was_airborne and is_on_floor() and not is_rolling:
+		anim.play(ANIM_RUN, 0.1, 1.0)
+=======
+	if was_airborne and is_on_floor():
+		is_jumping = false
+		if not is_rolling:
+			anim.play(ANIM_RUN, 0.1, 1.0)
+>>>>>>> c353c85 (Hice el cambio de la caida del jugador cuando salta y le agregue una springarm3D a la camara para que cuando el jugador se mueva la camara tambien lo haga y asi mejorar la vision del jugador y evitar que pierda cuando se encuentre con muchos obstaculos.)
+>>>>>>> 2f1d3bd (Hice el cambio de la caida del jugador cuando salta y le agregue una springarm3D a la camara para que cuando el jugador se mueva la camara tambien lo haga y asi mejorar la vision del jugador y evitar que pierda cuando se encuentre con muchos obstaculos.)
+=======
+>>>>>>> 98e6760 (Error de Git - Branch solucionado y eliminado, combinación de repo)
+>>>>>>> b8293d4 (Errores de depurador solucionados)
 
 
 ## Arranca la animación de salto y la congela en el aire.
