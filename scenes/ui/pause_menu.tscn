@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://cthvsljmcgqu8"]
+
+[ext_resource type="Script" uid="uid://bxstp4ky4v24x" path="res://scenes/ui/pause_menu.gd" id="1_vb6pq"]
+
+[node name="PauseMenu" type="Control" unique_id=1749283390]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_vb6pq")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=273359730]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=51784728]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Pausa" type="Label" parent="VBoxContainer" unique_id=158579350]
+layout_mode = 2
+text = "Pausa"
+
+[node name="ContinueButton" type="Button" parent="VBoxContainer" unique_id=946357082]
+layout_mode = 2
+text = "Continuar"
+
+[node name="ExitButton" type="Button" parent="VBoxContainer" unique_id=1747256084]
+layout_mode = 2
+text = "Salir"
+
+[node name="AbandonButton" type="Button" parent="VBoxContainer" unique_id=1103575965]
+layout_mode = 2
+text = "Abandonar"

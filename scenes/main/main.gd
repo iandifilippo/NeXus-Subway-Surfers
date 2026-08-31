@@ -58,6 +58,7 @@ const DESPAWN_Z := 15.0   ## Pasado este punto ya quedaron detrás de la cámara
 
 @onready var game_over: Control = $GameOver
 @onready var hud: Control = $HUD
+@onready var pause_menu: Control = $PauseMenu
 
 ## --- Estado de la partida ---
 var speed := START_SPEED       ## Velocidad actual del mundo.
@@ -289,3 +290,9 @@ func _on_coin_collected() -> void:
 ## Carril 0 → -2, carril 1 → 0, carril 2 → +2.
 func lane_to_x(lane: int) -> float:
 	return (lane - 1.0) * LANE_WIDTH
+## Escucha la tecla de (P) durante la partida. Solo abre el menú
+## si se sigue jugando (running) — si ya murió, no tiene sentido: ya
+## está la pantalla de GameOver, que también pausa el árbol.
+func _unhandled_input(event: InputEvent) -> void:
+	if running and event.is_action_pressed("pause"):
+		pause_menu.open()

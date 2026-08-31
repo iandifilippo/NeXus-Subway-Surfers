@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://0apeneven5m1" path="res://scenes/main/main.gd" id="1_sugp2"]
 [ext_resource type="PackedScene" uid="uid://b2jrbsxgpu238" path="res://scenes/ui/game_over.tscn" id="3_k2fmo"]
 [ext_resource type="PackedScene" uid="uid://ca6vqiswrfofb" path="res://scenes/ui/hud.tscn" id="4_l3cfh"]
+[ext_resource type="PackedScene" uid="uid://cthvsljmcgqu8" path="res://scenes/ui/pause_menu.tscn" id="5_6q06x"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_etmoi"]
 
@@ -37,3 +38,5 @@ transform = Transform3D(1, 0, 0, 0, 0.9659258, 0.25881904, 0, -0.25881904, 0.965
 [node name="GameOver" parent="." unique_id=1999420787 instance=ExtResource("3_k2fmo")]
 
 [node name="HUD" parent="." unique_id=2063382571 instance=ExtResource("4_l3cfh")]
+
+[node name="PauseMenu" parent="." unique_id=1749283390 instance=ExtResource("5_6q06x")]
