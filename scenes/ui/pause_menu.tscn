@@ -1,0 +1,65 @@
+[gd_scene format=3 uid="uid://bjvejy2nh1jld"]
+
+[ext_resource type="Script" uid="uid://bxstp4ky4v24x" path="res://scenes/ui/pause_menu.gd" id="1_6tw0m"]
+
+[node name="PauseMenu" type="Control" unique_id=1269575078]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_6tw0m")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=350593767]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0, 0, 0, 0.003921569)
+
+[node name="MainButtons" type="VBoxContainer" parent="." unique_id=1508072841]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TitleLabel" type="Label" parent="MainButtons" unique_id=1835678442]
+layout_mode = 2
+text = "Pausa"
+
+[node name="ContinueButton" type="Button" parent="MainButtons" unique_id=1415687939]
+layout_mode = 2
+text = "Continuar"
+
+[node name="ExitButton" type="Button" parent="MainButtons" unique_id=977140866]
+layout_mode = 2
+text = "Salir"
+
+[node name="AbandonButton" type="Button" parent="MainButtons" unique_id=2117741964]
+layout_mode = 2
+text = "Abandonar"
+
+[node name="CountdownLabel" type="Label" parent="." unique_id=296335217]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_font_sizes/font_size = 64
+text = "3"
+
+[node name="ConfirmDialog" type="VBoxContainer" parent="." unique_id=1564593156]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ConfirmLabel" type="Label" parent="ConfirmDialog" unique_id=1507183049]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+text = "¿Te vas? Perderás el progreso de la partida, ¿seguro que quieres hacerlo?"
+autowrap_mode = 2
+
+[node name="ConfirmButtons" type="HBoxContainer" parent="ConfirmDialog" unique_id=561765849]
+layout_mode = 2
+
+[node name="ConfirmAbandonButton" type="Button" parent="ConfirmDialog/ConfirmButtons" unique_id=1098937464]
+layout_mode = 2
+text = "Abandonar"
+
+[node name="ConfirmContinueButton" type="Button" parent="ConfirmDialog/ConfirmButtons" unique_id=709916973]
+layout_mode = 2
+text = "Seguir"
