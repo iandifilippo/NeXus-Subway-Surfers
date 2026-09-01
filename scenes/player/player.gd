@@ -13,7 +13,7 @@ const LANE_SNAP := 14.0    ## Qué tan rápido se acomoda al carril destino.
 ## --- Salto y deslizamiento ---
 const JUMP_VELOCITY := 8.0    ## Impulso vertical inicial al saltar.
 const ROLL_TIME := 1.0        ## Duración del roll en segundos.
-const SLAM_VELOCITY := -40.0  ## Fuerza hacia abajo al rodar en el aire.
+const SLAM_VELOCITY := -20.0  ## Fuerza hacia abajo al rodar en el aire.
 							  ## Permite cancelar un salto y caer de golpe.
 
 ## --- Nombres de las animaciones ---
