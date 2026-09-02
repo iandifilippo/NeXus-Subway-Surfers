@@ -36,7 +36,15 @@ transform = Transform3D(1, 0, 0, 0, 0.81095755, 0.58510506, 0, -0.58510506, 0.81
 [node name="Player" parent="." unique_id=194294277 instance=ExtResource("1_o5qli")]
 
 [node name="GameOver" parent="." unique_id=1999420787 instance=ExtResource("3_k2fmo")]
+offset_left = 530.0
+offset_top = 200.0
+offset_right = 530.0
+offset_bottom = 200.0
 
 [node name="HUD" parent="." unique_id=2063382571 instance=ExtResource("4_l3cfh")]
 
 [node name="PauseMenu" parent="." unique_id=1269575078 instance=ExtResource("5_6q06x")]
+offset_left = 530.0
+offset_top = 200.0
+offset_right = 530.0
+offset_bottom = 200.0

@@ -11,7 +11,7 @@ script = ExtResource("1_6tw0m")
 [node name="ColorRect" type="ColorRect" parent="." unique_id=350593767]
 layout_mode = 0
 offset_right = 40.0
-offset_bottom = 40.0
+offset_bottom = 41.0
 color = Color(0, 0, 0, 0.003921569)
 
 [node name="MainButtons" type="VBoxContainer" parent="." unique_id=1508072841]
@@ -37,8 +37,9 @@ text = "Abandonar"
 
 [node name="CountdownLabel" type="Label" parent="." unique_id=296335217]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
+offset_left = 20.0
+offset_right = 60.0
+offset_bottom = 88.0
 theme_override_font_sizes/font_size = 64
 text = "3"
 
