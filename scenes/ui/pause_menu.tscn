@@ -29,7 +29,7 @@ text = "Continuar"
 
 [node name="ExitButton" type="Button" parent="MainButtons" unique_id=977140866]
 layout_mode = 2
-text = "Salir"
+text = "Reiniciar"
 
 [node name="AbandonButton" type="Button" parent="MainButtons" unique_id=2117741964]
 layout_mode = 2
@@ -58,8 +58,8 @@ layout_mode = 2
 
 [node name="ConfirmAbandonButton" type="Button" parent="ConfirmDialog/ConfirmButtons" unique_id=1098937464]
 layout_mode = 2
-text = "Abandonar"
+text = " Si "
 
 [node name="ConfirmContinueButton" type="Button" parent="ConfirmDialog/ConfirmButtons" unique_id=709916973]
 layout_mode = 2
-text = "Seguir"
+text = "No"

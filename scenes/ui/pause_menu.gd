@@ -1,4 +1,4 @@
-## Menú de pausa. Se abre con la tecla "pause" (P) durante la partida.
+## Menú de pausa. Se abre con la tecla "pause" (P) o (esc) durante la partida.
 ## Tiene tres opciones:
 ##  - Continuar: cierra el menú con una cuenta regresiva de 3 segundos
 ##    antes de reanudar (le da al jugador un momento para ubicarse).
