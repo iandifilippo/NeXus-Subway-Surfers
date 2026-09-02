@@ -11,10 +11,16 @@ const LANE_SNAP := 14.0    ## Qué tan rápido se acomoda al carril destino.
 						   ## Más alto = más brusco. Más bajo = más resbaladizo.
 
 ## --- Salto y deslizamiento ---
+<<<<<<< ours
 const JUMP_VELOCITY := 8.0    ## Impulso vertical inicial al saltar.
 const ROLL_TIME := 1.0        ## Duración del roll en segundos.
 const SLAM_VELOCITY := -40.0  ## Fuerza hacia abajo al rodar en el aire.
 							  ## Permite cancelar un salto y caer de golpe.
+=======
+const JUMP_VELOCITY := 8.0    # Fuerza del impulso vertical al saltar
+const ROLL_TIME := 1.0        # Tiempo total del deslizamiento en segundos
+const SLAM_VELOCITY := -20.0  # Impulso descendente rápido para caer de golpe si se rueda en el aire
+>>>>>>> theirs
 
 ## --- Nombres de las animaciones ---
 ## Vienen de Mixamo. "mixamo_com" es el nombre que trae el FBX principal;
