@@ -1,5 +1,49 @@
 [gd_scene format=3 uid="uid://0d8qeogq8o7h"]
 
+[ext_resource type="Script" uid="uid://bgrgdqx73iyp0" path="res://scenes/ui/main_menu.gd" id="1_sl1te"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jlfwy"]
+bg_color = Color(0.4392157, 0.2784314, 0.007843138, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6gilf"]
+bg_color = Color(0.50980395, 0.3254902, 0.011764706, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sc8d0"]
+bg_color = Color(0.4392157, 0.2784314, 0.007843138, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xwqal"]
+bg_color = Color(0.50973576, 0.32587972, 0.010044599, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0vbqi"]
+bg_color = Color(0.4392157, 0.2784314, 0.007843138, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mpthh"]
+bg_color = Color(0.50980395, 0.3254902, 0.011764706, 1)
+
 [node name="main_menu" type="Control" unique_id=1420598755]
 layout_mode = 3
 anchors_preset = 15
@@ -7,8 +51,66 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_sl1te")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=256780135]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.06666667, 0.09411765, 0.15294118, 1)
+
+[node name="TitleLabel" type="Label" parent="." unique_id=1507761626]
+custom_minimum_size = Vector2(200, 100)
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = 324.0
+offset_top = 71.0
+offset_right = 802.0
+offset_bottom = 171.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
+theme_override_constants/shadow_offset_x = 4
+theme_override_constants/shadow_offset_y = 4
+theme_override_font_sizes/font_size = 60
+text = "Subway Surfers"
+horizontal_alignment = 1
+
+[node name="SubtituleLabel" type="Label" parent="." unique_id=299332720]
+layout_mode = 0
+offset_left = 531.0
+offset_top = 179.0
+offset_right = 609.0
+offset_bottom = 213.0
+theme_override_font_sizes/font_size = 24
+text = "NEXUS"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=2000438805]
+custom_minimum_size = Vector2(426, 260)
+layout_mode = 0
+offset_left = 366.0
+offset_top = 246.0
+offset_right = 792.0
+offset_bottom = 506.0
+theme_override_constants/separation = 20
+
+[node name="PlayButton" type="Button" parent="VBoxContainer" unique_id=295738682]
+custom_minimum_size = Vector2(300, 60)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_jlfwy")
+theme_override_styles/hover = SubResource("StyleBoxFlat_6gilf")
+text = "JUGAR"
+
+[node name="CreditsButton" type="Button" parent="VBoxContainer" unique_id=2005302525]
+custom_minimum_size = Vector2(300, 60)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_sc8d0")
+theme_override_styles/hover = SubResource("StyleBoxFlat_xwqal")
+text = "CREDITOS"
+
+[node name="ExitButton" type="Button" parent="VBoxContainer" unique_id=572542718]
+custom_minimum_size = Vector2(300, 60)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_0vbqi")
+theme_override_styles/hover = SubResource("StyleBoxFlat_mpthh")
+text = "SALIR"
