@@ -133,13 +133,10 @@ func _on_confirm_seguir_pressed() -> void:
 	main_buttons.show()
 
 
-## Acción pendiente de "Salir" confirmado. Debería ir al menú principal,
-## pero como todavía no existe, reinicia la partida actual como
-## reemplazo temporal. Cuando exista el menú, reemplazar por:
-## get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")
+## Acción pendiente de "Salir" confirmado: va al menú principal.
 func _confirm_go_to_menu() -> void:
 	get_tree().paused = false
-	get_tree().reload_current_scene()
+	get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")
 
 
 ## Acción pendiente de "Abandonar" confirmado: cierra el juego.
