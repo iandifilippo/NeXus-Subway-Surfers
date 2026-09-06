@@ -1,0 +1,290 @@
+[gd_scene format=3 uid="uid://b3v8fc1m3jbdb"]
+
+[ext_resource type="Script" uid="uid://bgrgdqx73iyp0" path="res://scenes/ui/main_menu.gd" id="1_sl1te"]
+
+[node name="MainMenu" type="Control" unique_id=1371470280]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_sl1te")
+
+[node name="Background" type="ColorRect" parent="." unique_id=364833693]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.003921569)
+
+[node name="HomeView" type="Control" parent="." unique_id=636177894]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="AvatarRecord" type="HBoxContainer" parent="HomeView" unique_id=1473857537]
+layout_mode = 1
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="AvatarIcon" type="ColorRect" parent="HomeView/AvatarRecord" unique_id=179776139]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+color = Color(0, 0, 0, 0.6392157)
+
+[node name="RecordLabel" type="Label" parent="HomeView/AvatarRecord" unique_id=1575133167]
+layout_mode = 2
+text = "Mejor Puntuación: 0 m"
+
+[node name="SettingsButton" type="Button" parent="HomeView" unique_id=110501292]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -30.0
+offset_bottom = 31.0
+grow_horizontal = 0
+text = "⚙️"
+
+[node name="PlayButton" type="Button" parent="HomeView" unique_id=29046179]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -64.0
+offset_top = -15.5
+offset_right = 64.0
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Toca para jugar"
+
+[node name="BottomIcons" type="HBoxContainer" parent="HomeView" unique_id=812576340]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="MissionsButton" type="Button" parent="HomeView/BottomIcons" unique_id=29050841]
+layout_mode = 2
+text = "⭐ Misiones"
+
+[node name="MeButton" type="Button" parent="HomeView/BottomIcons" unique_id=1272665087]
+layout_mode = 2
+text = "🧍 Yo"
+
+[node name="StoreButton" type="Button" parent="HomeView/BottomIcons" unique_id=799055231]
+layout_mode = 2
+text = "🛒 Tienda"
+
+[node name="MissionsPanel" type="Control" parent="." unique_id=1210552001]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="MissionsPanel" unique_id=1363362235]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.003921569)
+
+[node name="Header" type="HBoxContainer" parent="MissionsPanel" unique_id=173218967]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+
+[node name="TitleLabel" type="Label" parent="MissionsPanel/Header" unique_id=1256610317]
+layout_mode = 2
+text = "Misiones"
+
+[node name="SettingsButton" type="Button" parent="MissionsPanel/Header" unique_id=1357717743]
+layout_mode = 2
+text = "⚙️"
+
+[node name="CloseButton" type="Button" parent="MissionsPanel/Header" unique_id=1669520503]
+layout_mode = 2
+text = "✖️"
+
+[node name="PlaceholderLabel" type="Label" parent="MissionsPanel" unique_id=1867664219]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -57.5
+offset_top = -11.5
+offset_right = 57.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Próximamente"
+
+[node name="MePanel" type="Control" parent="." unique_id=323737926]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="MePanel" unique_id=137209784]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.003921569)
+
+[node name="Header" type="HBoxContainer" parent="MePanel" unique_id=595009408]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+
+[node name="TitleLabel" type="Label" parent="MePanel/Header" unique_id=1258301265]
+layout_mode = 2
+text = "Yo"
+
+[node name="SettingsButton" type="Button" parent="MePanel/Header" unique_id=1849925865]
+layout_mode = 2
+text = "⚙️"
+
+[node name="CloseButton" type="Button" parent="MePanel/Header" unique_id=729468581]
+layout_mode = 2
+text = "✖️"
+
+[node name="PlaceholderLabel" type="Label" parent="MePanel" unique_id=8884783]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -57.5
+offset_top = -11.5
+offset_right = 57.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Próximamente"
+
+[node name="StorePanel" type="Control" parent="." unique_id=1897597045]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="StorePanel" unique_id=1786822115]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.003921569)
+
+[node name="Header" type="HBoxContainer" parent="StorePanel" unique_id=1482971528]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+
+[node name="TitleLabel" type="Label" parent="StorePanel/Header" unique_id=1519825350]
+layout_mode = 2
+text = "Tienda"
+
+[node name="SettingsButton" type="Button" parent="StorePanel/Header" unique_id=356294554]
+layout_mode = 2
+text = "⚙️"
+
+[node name="CloseButton" type="Button" parent="StorePanel/Header" unique_id=889108527]
+layout_mode = 2
+text = "✖️"
+
+[node name="PlaceholderLabel" type="Label" parent="StorePanel" unique_id=197496598]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -57.5
+offset_top = -11.5
+offset_right = 57.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Próximamente"
+
+[node name="ConfigPanel" type="Control" parent="." unique_id=791883173]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="ConfigPanel" unique_id=2126359707]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.003921569)
+
+[node name="Header" type="HBoxContainer" parent="ConfigPanel" unique_id=1215819696]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+
+[node name="TitleLabel" type="Label" parent="ConfigPanel/Header" unique_id=173845561]
+layout_mode = 2
+text = "Configuración"
+
+[node name="CloseButton" type="Button" parent="ConfigPanel/Header" unique_id=161476939]
+layout_mode = 2
+text = "✖️"
+
+[node name="PlaceholderLabel" type="Label" parent="ConfigPanel" unique_id=371565979]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -57.5
+offset_top = -11.5
+offset_right = 57.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Próximamente"

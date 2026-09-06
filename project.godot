@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="NeXus Subway Surfers"
-run/main_scene="uid://d3kgu0idfjw4"
+run/main_scene="uid://b3v8fc1m3jbdb"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://icon.svg"
 
