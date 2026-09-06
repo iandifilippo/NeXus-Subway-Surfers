@@ -264,7 +264,8 @@ func recycle(chunk: Node3D) -> void:
 
 # Gestiona la muerte del jugador y la interrupción de la partida
 func _on_player_died() -> void:
-	running = false                                           # Detiene el bucle principal cambiando la bandera a false
+	running = false
+	GameData.report_run_result(distance, coins)                                           # Detiene el bucle principal cambiando la bandera a false
 	game_over.show_game_over(distance, coins)                 # Muestra la interfaz de Game Over enviando el puntaje final
 
 
