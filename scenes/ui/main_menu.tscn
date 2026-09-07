@@ -97,6 +97,10 @@ text = "🧍 Yo"
 layout_mode = 2
 text = "🛒 Tienda"
 
+[node name="TutorialButton" type="Button" parent="HomeView/BottomIcons" unique_id=1253783499]
+layout_mode = 2
+text = "❓ Cómo jugar"
+
 [node name="MissionsPanel" type="Control" parent="." unique_id=1210552001]
 visible = false
 layout_mode = 1
@@ -588,3 +592,110 @@ text = "Efectos de sonido"
 [node name="SfxSlider" type="HSlider" parent="ConfigPanel/SettingsBox/SfxRow" unique_id=1086523532]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
+
+[node name="TutorialPanel" type="Control" parent="." unique_id=624952331]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="TutorialPanel" unique_id=1674816263]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0, 0, 0, 0.003921569)
+
+[node name="Header" type="HBoxContainer" parent="TutorialPanel" unique_id=2033652984]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+
+[node name="TitleLabel" type="Label" parent="TutorialPanel/Header" unique_id=708570001]
+layout_mode = 2
+text = "Cómo jugar"
+
+[node name="CloseButton" type="Button" parent="TutorialPanel" unique_id=243443968]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -15.0
+offset_top = -31.0
+offset_right = 15.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "✖️"
+
+[node name="ControlsList" type="VBoxContainer" parent="TutorialPanel" unique_id=290086117]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ControlRow1" type="HBoxContainer" parent="TutorialPanel/ControlsList" unique_id=497217138]
+layout_mode = 2
+
+[node name="KeyLabel" type="Label" parent="TutorialPanel/ControlsList/ControlRow1" unique_id=1445400935]
+layout_mode = 2
+text = "← / A"
+
+[node name="ActionLabel" type="Label" parent="TutorialPanel/ControlsList/ControlRow1" unique_id=570656651]
+layout_mode = 2
+text = "Moverse a la izquierda"
+
+[node name="ControlRow2" type="HBoxContainer" parent="TutorialPanel/ControlsList" unique_id=1907006193]
+layout_mode = 2
+
+[node name="KeyLabel" type="Label" parent="TutorialPanel/ControlsList/ControlRow2" unique_id=1499194201]
+layout_mode = 2
+text = "→ / D"
+
+[node name="ActionLabel" type="Label" parent="TutorialPanel/ControlsList/ControlRow2" unique_id=2023889585]
+layout_mode = 2
+text = "Moverse a la derecha"
+
+[node name="ControlRow3" type="HBoxContainer" parent="TutorialPanel/ControlsList" unique_id=2097553591]
+layout_mode = 2
+
+[node name="KeyLabel" type="Label" parent="TutorialPanel/ControlsList/ControlRow3" unique_id=2008844090]
+layout_mode = 2
+text = "↑ / W"
+
+[node name="ActionLabel" type="Label" parent="TutorialPanel/ControlsList/ControlRow3" unique_id=1723195750]
+layout_mode = 2
+text = "Saltar"
+
+[node name="ControlRow4" type="HBoxContainer" parent="TutorialPanel/ControlsList" unique_id=1979004732]
+layout_mode = 2
+
+[node name="KeyLabel" type="Label" parent="TutorialPanel/ControlsList/ControlRow4" unique_id=3212961]
+layout_mode = 2
+text = "↓ / S"
+
+[node name="ActionLabel" type="Label" parent="TutorialPanel/ControlsList/ControlRow4" unique_id=578195395]
+layout_mode = 2
+text = "Rodar / agacharse"
+
+[node name="ControlRow5" type="HBoxContainer" parent="TutorialPanel/ControlsList" unique_id=593457946]
+layout_mode = 2
+
+[node name="KeyLabel" type="Label" parent="TutorialPanel/ControlsList/ControlRow5" unique_id=274487090]
+layout_mode = 2
+text = "	P"
+
+[node name="ActionLabel" type="Label" parent="TutorialPanel/ControlsList/ControlRow5" unique_id=1047410389]
+layout_mode = 2
+text = "Pausar el juego"

@@ -1,23 +1,27 @@
 ## Menú principal del juego. Tiene una vista de inicio (HomeView) y
-## cuatro paneles a pantalla completa (Misiones, Yo, Tienda,
-## Configuración) que se muestran uno a la vez, nunca superpuestos.
+## cinco paneles a pantalla completa (Misiones, Yo, Tienda,
+## Configuración, Cómo jugar) que se muestran uno a la vez, nunca
+## superpuestos.
 ##
-## Misiones, Yo y Tienda ya tienen su contenido final (con datos y
+## Misiones, Yo y Tienda tienen su contenido final (con datos y
 ## economía simplificados, sin sistemas reales detrás). Configuración
-## todavía es un placeholder.
+## es un placeholder puramente visual. Cómo jugar es una lista fija de
+## controles del juego.
 extends Control
 
-## Referencia a las 5 "vistas" posibles. show_only() se encarga de que
+## Referencia a las 6 "vistas" posibles. show_only() se encarga de que
 ## solo una esté visible a la vez.
 @onready var home_view: Control = $HomeView
 @onready var missions_panel: Control = $MissionsPanel
 @onready var me_panel: Control = $MePanel
 @onready var store_panel: Control = $StorePanel
 @onready var config_panel: Control = $ConfigPanel
+@onready var tutorial_panel: Control = $TutorialPanel
 
 ## Etiquetas de récord y monedas. El récord solo existe en Home; las
-## monedas se repiten en Home, Misiones, Yo y Tienda (Configuración no
-## las necesita), así que se actualizan todas juntas en un array.
+## monedas se repiten en Home, Misiones, Yo y Tienda (Configuración y
+## Cómo jugar no las necesitan), así que se actualizan todas juntas en
+## un array.
 @onready var record_label: Label = $HomeView/AvatarRecord/InfoBox/RecordLabel
 @onready var coin_labels: Array[Label] = [
 	$HomeView/AvatarRecord/InfoBox/CoinLabel,
@@ -61,18 +65,22 @@ func _ready() -> void:
 	$HomeView/BottomIcons/MissionsButton.pressed.connect(_on_missions_pressed)
 	$HomeView/BottomIcons/MeButton.pressed.connect(_on_me_pressed)
 	$HomeView/BottomIcons/StoreButton.pressed.connect(_on_store_pressed)
+	$HomeView/BottomIcons/TutorialButton.pressed.connect(_on_tutorial_pressed)
 
-	# Cada panel (menos Configuración) tiene su propio botón de
-	# engranaje: los tres llevan al mismo sitio, por eso reutilizan
-	# _on_settings_pressed en vez de tener una función cada uno.
+	# Cada panel (menos Configuración y Cómo jugar) tiene su propio
+	# botón de engranaje: los tres llevan al mismo sitio, por eso
+	# reutilizan _on_settings_pressed en vez de tener una función cada
+	# uno.
 	$MissionsPanel/SettingsButton.pressed.connect(_on_settings_pressed)
 	$MePanel/SettingsButton.pressed.connect(_on_settings_pressed)
 	$StorePanel/SettingsButton.pressed.connect(_on_settings_pressed)
 
-	# Las X de Misiones, Yo y Tienda siempre vuelven al inicio.
+	# Las X de Misiones, Yo, Tienda y Cómo jugar siempre vuelven al
+	# inicio.
 	$MissionsPanel/CloseButton.pressed.connect(_on_close_pressed)
 	$MePanel/CloseButton.pressed.connect(_on_close_pressed)
 	$StorePanel/CloseButton.pressed.connect(_on_close_pressed)
+	$TutorialPanel/CloseButton.pressed.connect(_on_close_pressed)
 	# La X de Configuración es distinta: vuelve a "previous_view", no
 	# siempre al inicio.
 	$ConfigPanel/CloseButton.pressed.connect(_on_config_close_pressed)
@@ -90,7 +98,7 @@ func _ready() -> void:
 	show_only(home_view)
 
 
-## Cuál de los 4 paneles (o Home) está visible ahora mismo. Se usa para
+## Cuál de las 5 vistas (o Home) está visible ahora mismo. Se usa para
 ## recordar de dónde venía el jugador antes de abrir Configuración.
 func get_current_view() -> Control:
 	if missions_panel.visible:
@@ -99,6 +107,8 @@ func get_current_view() -> Control:
 		return me_panel
 	if store_panel.visible:
 		return store_panel
+	if tutorial_panel.visible:
+		return tutorial_panel
 	return home_view
 
 
@@ -119,7 +129,7 @@ func refresh_store() -> void:
 	free_gift_button.disabled = GameData.daily_gift_claimed
 
 
-## Muestra únicamente la vista indicada y oculta las otras cuatro.
+## Muestra únicamente la vista indicada y oculta las otras cinco.
 func show_only(view: Control) -> void:
 	refresh_labels()
 	if view == store_panel:
@@ -129,6 +139,7 @@ func show_only(view: Control) -> void:
 	me_panel.visible = (view == me_panel)
 	store_panel.visible = (view == store_panel)
 	config_panel.visible = (view == config_panel)
+	tutorial_panel.visible = (view == tutorial_panel)
 
 
 ## Botón "Toca para jugar": carga la escena de la partida.
@@ -155,7 +166,12 @@ func _on_store_pressed() -> void:
 	show_only(store_panel)
 
 
-## X de Misiones, Yo y Tienda: siempre vuelve al inicio.
+## Botón "❓ Cómo jugar": muestra la lista de controles.
+func _on_tutorial_pressed() -> void:
+	show_only(tutorial_panel)
+
+
+## X de Misiones, Yo, Tienda y Cómo jugar: siempre vuelve al inicio.
 func _on_close_pressed() -> void:
 	show_only(home_view)
 
