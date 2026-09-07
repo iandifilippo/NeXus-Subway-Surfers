@@ -405,21 +405,6 @@ text = "Tienda"
 layout_mode = 2
 text = "🪙 0"
 
-[node name="PlaceholderLabel" type="Label" parent="StorePanel" unique_id=197496598]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -57.5
-offset_top = -11.5
-offset_right = 57.5
-offset_bottom = 11.5
-grow_horizontal = 2
-grow_vertical = 2
-text = "Próximamente"
-
 [node name="SettingsButton" type="Button" parent="StorePanel" unique_id=356294554]
 layout_mode = 1
 anchors_preset = 1
@@ -443,6 +428,56 @@ offset_right = 15.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "✖️"
+
+[node name="ItemsBox" type="VBoxContainer" parent="StorePanel" unique_id=130197479]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="FreeGiftRow" type="HBoxContainer" parent="StorePanel/ItemsBox" unique_id=485667021]
+layout_mode = 2
+
+[node name="FreeGiftLabel" type="Label" parent="StorePanel/ItemsBox/FreeGiftRow" unique_id=1218652824]
+layout_mode = 2
+text = "Regalo gratis"
+
+[node name="FreeGiftButton" type="Button" parent="StorePanel/ItemsBox/FreeGiftRow" unique_id=221721861]
+layout_mode = 2
+text = "Reclamar"
+
+[node name="CrateRow1" type="HBoxContainer" parent="StorePanel/ItemsBox" unique_id=1324603677]
+layout_mode = 2
+
+[node name="Crate1Label" type="Label" parent="StorePanel/ItemsBox/CrateRow1" unique_id=443816371]
+layout_mode = 2
+text = "Caja pequeña — 50 monedas"
+
+[node name="Crate1Button" type="Button" parent="StorePanel/ItemsBox/CrateRow1" unique_id=2018911281]
+layout_mode = 2
+text = "Comprar"
+
+[node name="CrateRow2" type="HBoxContainer" parent="StorePanel/ItemsBox" unique_id=121024399]
+layout_mode = 2
+
+[node name="Crate2Label" type="Label" parent="StorePanel/ItemsBox/CrateRow2" unique_id=1298612069]
+layout_mode = 2
+text = "Caja grande — 150 monedas"
+
+[node name="Crate2Button" type="Button" parent="StorePanel/ItemsBox/CrateRow2" unique_id=433538830]
+layout_mode = 2
+text = "Comprar"
+
+[node name="StatusLabel" type="Label" parent="StorePanel/ItemsBox" unique_id=1047228001]
+layout_mode = 2
 
 [node name="ConfigPanel" type="Control" parent="." unique_id=791883173]
 visible = false

@@ -2,11 +2,9 @@
 ## cuatro paneles a pantalla completa (Misiones, Yo, Tienda,
 ## Configuración) que se muestran uno a la vez, nunca superpuestos.
 ##
-## Yo, Tienda y Configuración todavía no tienen contenido real (solo
-## título, botón de cerrar y un texto de "Próximamente") — se agregan
-## en commits separados más adelante. Misiones ya tiene su contenido
-## final: listas de ejemplo fijas, sin un sistema de seguimiento real
-## de progreso.
+## Misiones, Yo y Tienda ya tienen su contenido final (con datos y
+## economía simplificados, sin sistemas reales detrás). Configuración
+## todavía es un placeholder.
 extends Control
 
 ## Referencia a las 5 "vistas" posibles. show_only() se encarga de que
@@ -32,6 +30,20 @@ extends Control
 ## mostrando la diaria, igual que en el boceto original.
 @onready var daily_list: VBoxContainer = $MissionsPanel/DailyList
 @onready var season_list: VBoxContainer = $MissionsPanel/SeasonList
+
+## Nodos de la tienda.
+@onready var free_gift_button: Button = $StorePanel/ItemsBox/FreeGiftRow/FreeGiftButton
+@onready var crate1_button: Button = $StorePanel/ItemsBox/CrateRow1/Crate1Button
+@onready var crate2_button: Button = $StorePanel/ItemsBox/CrateRow2/Crate2Button
+@onready var store_status_label: Label = $StorePanel/ItemsBox/StatusLabel
+
+## Costo y recompensa de cada caja. Es una economía simplificada y
+## decorativa (pagas monedas para recibir más monedas) porque el juego
+## todavía no tiene potenciadores reales que vender.
+const CRATE_SMALL_COST := 50
+const CRATE_SMALL_REWARD := 80
+const CRATE_LARGE_COST := 150
+const CRATE_LARGE_REWARD := 220
 
 ## Qué vista estaba abierta antes de entrar a Configuración. Se usa
 ## para que la X de Configuración vuelva justo ahí, en vez de siempre
@@ -70,6 +82,11 @@ func _ready() -> void:
 	$MissionsPanel/TabButtons/DailyTabButton.pressed.connect(_on_daily_tab_pressed)
 	$MissionsPanel/TabButtons/SeasonTabButton.pressed.connect(_on_season_tab_pressed)
 
+	# Botones de la tienda.
+	free_gift_button.pressed.connect(_on_free_gift_pressed)
+	crate1_button.pressed.connect(_on_buy_crate_small_pressed)
+	crate2_button.pressed.connect(_on_buy_crate_large_pressed)
+
 	show_only(home_view)
 
 
@@ -95,9 +112,18 @@ func refresh_labels() -> void:
 		label.text = coin_text
 
 
+## Deja el botón de regalo gratis deshabilitado si ya se reclamó en
+## esta sesión. Se llama al abrir la tienda, no solo al arrancar el
+## juego, por si se reclamó y luego se navegó a otra pantalla.
+func refresh_store() -> void:
+	free_gift_button.disabled = GameData.daily_gift_claimed
+
+
 ## Muestra únicamente la vista indicada y oculta las otras cuatro.
 func show_only(view: Control) -> void:
 	refresh_labels()
+	if view == store_panel:
+		refresh_store()
 	home_view.visible = (view == home_view)
 	missions_panel.visible = (view == missions_panel)
 	me_panel.visible = (view == me_panel)
@@ -152,3 +178,37 @@ func _on_daily_tab_pressed() -> void:
 func _on_season_tab_pressed() -> void:
 	daily_list.hide()
 	season_list.show()
+
+
+## Botón "Reclamar" del regalo gratis. GameData decide si ya se había
+## reclamado (devuelve 0 en ese caso, aunque el botón deshabilitado ya
+## debería evitar que se pueda pulsar dos veces).
+func _on_free_gift_pressed() -> void:
+	var reward := GameData.claim_daily_gift()
+	if reward > 0:
+		store_status_label.text = "¡Reclamaste %d monedas!" % reward
+	refresh_labels()
+	refresh_store()
+
+
+## Compra la caja pequeña, si alcanzan las monedas.
+func _on_buy_crate_small_pressed() -> void:
+	buy_crate(CRATE_SMALL_COST, CRATE_SMALL_REWARD)
+
+
+## Compra la caja grande, si alcanzan las monedas.
+func _on_buy_crate_large_pressed() -> void:
+	buy_crate(CRATE_LARGE_COST, CRATE_LARGE_REWARD)
+
+
+## Lógica compartida por las dos cajas: intenta descontar el costo y,
+## si alcanzó, suma la recompensa. Es una economía decorativa (se paga
+## en monedas para recibir más monedas) porque todavía no hay
+## potenciadores reales que vender.
+func buy_crate(cost: int, reward: int) -> void:
+	if GameData.try_spend_coins(cost):
+		GameData.total_coins += reward
+		store_status_label.text = "¡Abriste la caja y ganaste %d monedas!" % reward
+	else:
+		store_status_label.text = "No tienes suficientes monedas."
+	refresh_labels()
