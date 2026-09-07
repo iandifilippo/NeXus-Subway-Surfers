@@ -38,9 +38,16 @@ custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 color = Color(0, 0, 0, 0.6392157)
 
-[node name="RecordLabel" type="Label" parent="HomeView/AvatarRecord" unique_id=1575133167]
+[node name="InfoBox" type="VBoxContainer" parent="HomeView/AvatarRecord" unique_id=1394094740]
+layout_mode = 2
+
+[node name="RecordLabel" type="Label" parent="HomeView/AvatarRecord/InfoBox" unique_id=1575133167]
 layout_mode = 2
 text = "Mejor Puntuación: 0 m"
+
+[node name="CoinLabel" type="Label" parent="HomeView/AvatarRecord/InfoBox" unique_id=1030323896]
+layout_mode = 2
+text = "🪙 0"
 
 [node name="SettingsButton" type="Button" parent="HomeView" unique_id=110501292]
 layout_mode = 1
@@ -117,6 +124,10 @@ grow_horizontal = 2
 layout_mode = 2
 text = "Misiones"
 
+[node name="CoinLabel" type="Label" parent="MissionsPanel/Header" unique_id=1447319068]
+layout_mode = 2
+text = "🪙 0"
+
 [node name="SettingsButton" type="Button" parent="MissionsPanel/Header" unique_id=1357717743]
 layout_mode = 2
 text = "⚙️"
@@ -168,6 +179,10 @@ grow_horizontal = 2
 layout_mode = 2
 text = "Yo"
 
+[node name="CoinLabel" type="Label" parent="MePanel/Header" unique_id=1218519643]
+layout_mode = 2
+text = "🪙 0"
+
 [node name="SettingsButton" type="Button" parent="MePanel/Header" unique_id=1849925865]
 layout_mode = 2
 text = "⚙️"
@@ -218,6 +233,10 @@ grow_horizontal = 2
 [node name="TitleLabel" type="Label" parent="StorePanel/Header" unique_id=1519825350]
 layout_mode = 2
 text = "Tienda"
+
+[node name="CoinLabel" type="Label" parent="StorePanel/Header" unique_id=1928039927]
+layout_mode = 2
+text = "🪙 0"
 
 [node name="SettingsButton" type="Button" parent="StorePanel/Header" unique_id=356294554]
 layout_mode = 2
