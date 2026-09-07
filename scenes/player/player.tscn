@@ -22,7 +22,7 @@ transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0, 0, 0)
 [node name="run" parent="Model" unique_id=1705301582 instance=ExtResource("2_dovo2")]
 transform = Transform3D(-3, 0, -2.6226832e-07, 0, 3, 0, 2.6226832e-07, 0, -3, 0, 0, 0)
 
-[node name="Skeleton3D" parent="Model/run" index="0" unique_id=898514319]
+[node name="Skeleton3D" parent="Model/run" index="0" unique_id=49838131]
 bones/0/position = Vector3(0.0037453845, 0.74523234, 0.017925285)
 bones/0/rotation = Quaternion(0.069348015, -0.04981528, -0.043184917, 0.99541175)
 bones/1/rotation = Quaternion(0.12437096, 0.12537807, 0.03307326, 0.9837268)
@@ -155,7 +155,7 @@ bones/80/position = Vector3(-7.6082196e-13, 0.17794, -4.2660833e-11)
 bones/80/rotation = Quaternion(0.404804, -0.019601678, 0.008680066, 0.91415215)
 bones/81/rotation = Quaternion(-2.1684043e-19, 4.065758e-20, -6.938894e-18, 1)
 
-[node name="AnimationPlayer" parent="Model/run" index="2" unique_id=155038409]
+[node name="AnimationPlayer" parent="Model/run" index="2" unique_id=724620117]
 libraries/jump = ExtResource("3_lvxji")
 libraries/roll = ExtResource("4_p47bc")
 
