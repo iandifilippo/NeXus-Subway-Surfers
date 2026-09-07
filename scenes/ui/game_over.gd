@@ -36,9 +36,7 @@ func _on_retry() -> void:
 	get_tree().reload_current_scene()
 
 
-## Botón "Menú". Por ahora hace lo mismo que reintentar.
-## Cuando exista un menú principal, aquí iría:
-## get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")
+## Botón "Menú": vuelve al menú principal.
 func _on_menu() -> void:
 	get_tree().paused = false
-	get_tree().reload_current_scene()
+	get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")

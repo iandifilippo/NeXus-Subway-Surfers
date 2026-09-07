@@ -15,10 +15,27 @@ extends Control
 @onready var store_panel: Control = $StorePanel
 @onready var config_panel: Control = $ConfigPanel
 
-@onready var record_label: Label = $HomeView/AvatarRecord/RecordLabel
+## Etiquetas de récord y monedas. El récord solo existe en Home; las
+## monedas se repiten en Home, Misiones, Yo y Tienda (Configuración no
+## las necesita), así que se actualizan todas juntas en un array.
+@onready var record_label: Label = $HomeView/AvatarRecord/InfoBox/RecordLabel
+@onready var coin_labels: Array[Label] = [
+	$HomeView/AvatarRecord/InfoBox/CoinLabel,
+	$MissionsPanel/Header/CoinLabel,
+	$MePanel/Header/CoinLabel,
+	$StorePanel/Header/CoinLabel,
+]
+
+## Qué vista estaba abierta antes de entrar a Configuración. Se usa
+## para que la X de Configuración vuelva justo ahí, en vez de siempre
+## al inicio — así, si abres Configuración desde Misiones, la X te
+## regresa a Misiones, no al Home.
+var previous_view: Control
 
 
 func _ready() -> void:
+	previous_view = home_view
+
 	# Botones de la vista de inicio.
 	$HomeView/PlayButton.pressed.connect(_on_play_pressed)
 	$HomeView/SettingsButton.pressed.connect(_on_settings_pressed)
@@ -33,28 +50,42 @@ func _ready() -> void:
 	$MePanel/Header/SettingsButton.pressed.connect(_on_settings_pressed)
 	$StorePanel/Header/SettingsButton.pressed.connect(_on_settings_pressed)
 
-	# Los cuatro botones "X" hacen exactamente lo mismo: volver al inicio.
+	# Las X de Misiones, Yo y Tienda siempre vuelven al inicio.
 	$MissionsPanel/Header/CloseButton.pressed.connect(_on_close_pressed)
 	$MePanel/Header/CloseButton.pressed.connect(_on_close_pressed)
 	$StorePanel/Header/CloseButton.pressed.connect(_on_close_pressed)
-	$ConfigPanel/Header/CloseButton.pressed.connect(_on_close_pressed)
+	# La X de Configuración es distinta: vuelve a "previous_view", no
+	# siempre al inicio.
+	$ConfigPanel/Header/CloseButton.pressed.connect(_on_config_close_pressed)
 
-	update_record_label()
 	show_only(home_view)
 
 
-## Actualiza el texto del récord leyendo el Autoload GameData. Se llama
-## al abrir el menú y también al volver de cualquier panel, por si
-## acaso el valor cambió mientras tanto (por ejemplo, después de jugar
-## una partida y volver aquí).
-func update_record_label() -> void:
+## Cuál de los 4 paneles (o Home) está visible ahora mismo. Se usa para
+## recordar de dónde venía el jugador antes de abrir Configuración.
+func get_current_view() -> Control:
+	if missions_panel.visible:
+		return missions_panel
+	if me_panel.visible:
+		return me_panel
+	if store_panel.visible:
+		return store_panel
+	return home_view
+
+
+## Actualiza el texto del récord y de todas las etiquetas de monedas,
+## leyendo el Autoload GameData. Se llama cada vez que se cambia de
+## vista, para que los números nunca se queden desactualizados.
+func refresh_labels() -> void:
 	record_label.text = "Mejor puntuación: %d m" % GameData.best_distance
+	var coin_text := "🪙 %d" % GameData.total_coins
+	for label in coin_labels:
+		label.text = coin_text
 
 
 ## Muestra únicamente la vista indicada y oculta las otras cuatro.
-## Centralizarlo en una sola función evita tener que acordarse de
-## ocultar manualmente cada panel en cada botón que cambia de vista.
 func show_only(view: Control) -> void:
+	refresh_labels()
 	home_view.visible = (view == home_view)
 	missions_panel.visible = (view == missions_panel)
 	me_panel.visible = (view == me_panel)
@@ -67,7 +98,10 @@ func _on_play_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/main/main.tscn")
 
 
+## Guarda desde dónde se abrió Configuración, para que su X sepa a
+## dónde volver.
 func _on_settings_pressed() -> void:
+	previous_view = get_current_view()
 	show_only(config_panel)
 
 
@@ -83,8 +117,12 @@ func _on_store_pressed() -> void:
 	show_only(store_panel)
 
 
-## Cualquiera de los cuatro botones "X" llama aquí: vuelve al inicio y
-## refresca el récord por si cambió.
+## X de Misiones, Yo y Tienda: siempre vuelve al inicio.
 func _on_close_pressed() -> void:
-	update_record_label()
 	show_only(home_view)
+
+
+## X de Configuración: vuelve a la vista desde donde se abrió (Home,
+## Misiones, Yo o Tienda), no siempre al inicio.
+func _on_config_close_pressed() -> void:
+	show_only(previous_view)
