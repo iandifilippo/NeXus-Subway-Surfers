@@ -507,21 +507,6 @@ grow_horizontal = 2
 layout_mode = 2
 text = "Configuración"
 
-[node name="PlaceholderLabel" type="Label" parent="ConfigPanel" unique_id=371565979]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -57.5
-offset_top = -11.5
-offset_right = 57.5
-offset_bottom = 11.5
-grow_horizontal = 2
-grow_vertical = 2
-text = "Próximamente"
-
 [node name="CloseButton" type="Button" parent="ConfigPanel" unique_id=161476939]
 layout_mode = 1
 anchors_preset = 7
@@ -535,3 +520,71 @@ offset_right = 15.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "✖️"
+
+[node name="SettingsBox" type="VBoxContainer" parent="ConfigPanel" unique_id=497690500]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PlayGamesRow" type="HBoxContainer" parent="ConfigPanel/SettingsBox" unique_id=47977442]
+layout_mode = 2
+
+[node name="PlayGamesLabel" type="Label" parent="ConfigPanel/SettingsBox/PlayGamesRow" unique_id=932867246]
+layout_mode = 2
+text = "Play Game"
+
+[node name="PlayGamesButton" type="Button" parent="ConfigPanel/SettingsBox/PlayGamesRow" unique_id=1201419124]
+layout_mode = 2
+text = "Conectar"
+
+[node name="FacebookRow" type="HBoxContainer" parent="ConfigPanel/SettingsBox" unique_id=701235032]
+layout_mode = 2
+
+[node name="FacebookLabel" type="Label" parent="ConfigPanel/SettingsBox/FacebookRow" unique_id=621837119]
+layout_mode = 2
+text = "Facebook"
+
+[node name="FacebookButton" type="Button" parent="ConfigPanel/SettingsBox/FacebookRow" unique_id=728307758]
+layout_mode = 2
+text = "Conectar"
+
+[node name="StereoRow" type="HBoxContainer" parent="ConfigPanel/SettingsBox" unique_id=1184782526]
+layout_mode = 2
+
+[node name="StereoLabel" type="Label" parent="ConfigPanel/SettingsBox/StereoRow" unique_id=456700567]
+layout_mode = 2
+text = "Estéreo"
+
+[node name="StereoToggle" type="CheckButton" parent="ConfigPanel/SettingsBox/StereoRow" unique_id=843775641]
+layout_mode = 2
+
+[node name="MusicRow" type="HBoxContainer" parent="ConfigPanel/SettingsBox" unique_id=1831688973]
+layout_mode = 2
+
+[node name="MusicLabel" type="Label" parent="ConfigPanel/SettingsBox/MusicRow" unique_id=58332761]
+layout_mode = 2
+text = "Música"
+
+[node name="MusicSlider" type="HSlider" parent="ConfigPanel/SettingsBox/MusicRow" unique_id=859474921]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+
+[node name="SfxRow" type="HBoxContainer" parent="ConfigPanel/SettingsBox" unique_id=188120214]
+layout_mode = 2
+
+[node name="SfxLabel" type="Label" parent="ConfigPanel/SettingsBox/SfxRow" unique_id=1304082899]
+layout_mode = 2
+text = "Efectos de sonido"
+
+[node name="SfxSlider" type="HSlider" parent="ConfigPanel/SettingsBox/SfxRow" unique_id=1086523532]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
