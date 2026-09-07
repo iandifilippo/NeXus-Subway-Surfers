@@ -2,9 +2,11 @@
 ## cuatro paneles a pantalla completa (Misiones, Yo, Tienda,
 ## Configuración) que se muestran uno a la vez, nunca superpuestos.
 ##
-## Por ahora los cuatro paneles solo tienen un título, un botón de
-## cerrar y un texto de "Próximamente" — el contenido real de cada uno
-## se agrega en commits separados más adelante.
+## Yo, Tienda y Configuración todavía no tienen contenido real (solo
+## título, botón de cerrar y un texto de "Próximamente") — se agregan
+## en commits separados más adelante. Misiones ya tiene su contenido
+## final: listas de ejemplo fijas, sin un sistema de seguimiento real
+## de progreso.
 extends Control
 
 ## Referencia a las 5 "vistas" posibles. show_only() se encarga de que
@@ -26,6 +28,11 @@ extends Control
 	$StorePanel/Header/CoinLabel,
 ]
 
+## Las dos listas de misiones. Solo una está visible a la vez: arranca
+## mostrando la diaria, igual que en el boceto original.
+@onready var daily_list: VBoxContainer = $MissionsPanel/DailyList
+@onready var season_list: VBoxContainer = $MissionsPanel/SeasonList
+
 ## Qué vista estaba abierta antes de entrar a Configuración. Se usa
 ## para que la X de Configuración vuelva justo ahí, en vez de siempre
 ## al inicio — así, si abres Configuración desde Misiones, la X te
@@ -43,9 +50,9 @@ func _ready() -> void:
 	$HomeView/BottomIcons/MeButton.pressed.connect(_on_me_pressed)
 	$HomeView/BottomIcons/StoreButton.pressed.connect(_on_store_pressed)
 
-		# Cada panel (menos Configuración) tiene su propio botón de
+	# Cada panel (menos Configuración) tiene su propio botón de
 	# engranaje: los tres llevan al mismo sitio, por eso reutilizan
-	# _on_settings_pressed en vez de tener una función cada una.
+	# _on_settings_pressed en vez de tener una función cada uno.
 	$MissionsPanel/SettingsButton.pressed.connect(_on_settings_pressed)
 	$MePanel/SettingsButton.pressed.connect(_on_settings_pressed)
 	$StorePanel/SettingsButton.pressed.connect(_on_settings_pressed)
@@ -57,6 +64,11 @@ func _ready() -> void:
 	# La X de Configuración es distinta: vuelve a "previous_view", no
 	# siempre al inicio.
 	$ConfigPanel/CloseButton.pressed.connect(_on_config_close_pressed)
+
+	# Pestañas de Misiones: alternan entre la lista diaria y la de
+	# temporada, nunca se muestran las dos a la vez.
+	$MissionsPanel/TabButtons/DailyTabButton.pressed.connect(_on_daily_tab_pressed)
+	$MissionsPanel/TabButtons/SeasonTabButton.pressed.connect(_on_season_tab_pressed)
 
 	show_only(home_view)
 
@@ -126,3 +138,17 @@ func _on_close_pressed() -> void:
 ## Misiones, Yo o Tienda), no siempre al inicio.
 func _on_config_close_pressed() -> void:
 	show_only(previous_view)
+
+
+## Pestaña "Objetivo diario": muestra la lista diaria y oculta la de
+## temporada.
+func _on_daily_tab_pressed() -> void:
+	daily_list.show()
+	season_list.hide()
+
+
+## Pestaña "Objetivo Temporada": muestra la lista de temporada y oculta
+## la diaria.
+func _on_season_tab_pressed() -> void:
+	daily_list.hide()
+	season_list.show()

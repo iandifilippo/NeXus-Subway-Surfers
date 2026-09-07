@@ -128,21 +128,6 @@ text = "Misiones"
 layout_mode = 2
 text = "🪙 0"
 
-[node name="PlaceholderLabel" type="Label" parent="MissionsPanel" unique_id=1867664219]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -57.5
-offset_top = -11.5
-offset_right = 57.5
-offset_bottom = 11.5
-grow_horizontal = 2
-grow_vertical = 2
-text = "Próximamente"
-
 [node name="SettingsButton" type="Button" parent="MissionsPanel" unique_id=1357717743]
 layout_mode = 1
 anchors_preset = 1
@@ -166,6 +151,125 @@ offset_right = 15.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "✖️"
+
+[node name="TabButtons" type="HBoxContainer" parent="MissionsPanel" unique_id=1200603678]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -147.0
+offset_right = 147.0
+offset_bottom = 31.0
+grow_horizontal = 2
+
+[node name="DailyTabButton" type="Button" parent="MissionsPanel/TabButtons" unique_id=994887489]
+layout_mode = 2
+text = "Objetivo diario"
+
+[node name="SeasonTabButton" type="Button" parent="MissionsPanel/TabButtons" unique_id=579504264]
+layout_mode = 2
+text = "Objetivo Temporada"
+
+[node name="DailyList" type="VBoxContainer" parent="MissionsPanel" unique_id=1451799193]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MissionRow1" type="HBoxContainer" parent="MissionsPanel/DailyList" unique_id=1864098337]
+layout_mode = 2
+
+[node name="DescLabel" type="Label" parent="MissionsPanel/DailyList/MissionRow1" unique_id=810999070]
+layout_mode = 2
+text = "Recoge 50 monedas (0/50)"
+
+[node name="GoButton" type="Button" parent="MissionsPanel/DailyList/MissionRow1" unique_id=408488309]
+layout_mode = 2
+disabled = true
+text = "Vamos"
+
+[node name="MissionRow2" type="HBoxContainer" parent="MissionsPanel/DailyList" unique_id=888328931]
+layout_mode = 2
+
+[node name="DescLabel" type="Label" parent="MissionsPanel/DailyList/MissionRow2" unique_id=1224042401]
+layout_mode = 2
+text = "Ve a 500 metros de distancia (0/500)"
+
+[node name="GoButton" type="Button" parent="MissionsPanel/DailyList/MissionRow2" unique_id=1605763492]
+layout_mode = 2
+disabled = true
+text = "Vamos"
+
+[node name="MissionRow3" type="HBoxContainer" parent="MissionsPanel/DailyList" unique_id=38561100]
+layout_mode = 2
+
+[node name="DescLabel" type="Label" parent="MissionsPanel/DailyList/MissionRow3" unique_id=1981455767]
+layout_mode = 2
+text = "Recoge 100 monedas (0/100)"
+
+[node name="GoButton" type="Button" parent="MissionsPanel/DailyList/MissionRow3" unique_id=879934829]
+layout_mode = 2
+disabled = true
+text = "Vamos"
+
+[node name="SeasonList" type="VBoxContainer" parent="MissionsPanel" unique_id=1416273533]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MissionRow1" type="HBoxContainer" parent="MissionsPanel/SeasonList" unique_id=71120198]
+layout_mode = 2
+
+[node name="DescLabel" type="Label" parent="MissionsPanel/SeasonList/MissionRow1" unique_id=938716214]
+layout_mode = 2
+text = "Recoge 1000 monedas en la temporada (0/1000)"
+
+[node name="GoButton" type="Button" parent="MissionsPanel/SeasonList/MissionRow1" unique_id=1585850852]
+layout_mode = 2
+disabled = true
+text = "Vamos"
+
+[node name="MissionRow2" type="HBoxContainer" parent="MissionsPanel/SeasonList" unique_id=84196709]
+layout_mode = 2
+
+[node name="DescLabel" type="Label" parent="MissionsPanel/SeasonList/MissionRow2" unique_id=2018909715]
+layout_mode = 2
+text = "Alcanza 5000 metros acumulados (0/5000)"
+
+[node name="GoButton" type="Button" parent="MissionsPanel/SeasonList/MissionRow2" unique_id=650788088]
+layout_mode = 2
+disabled = true
+text = "Vamos"
+
+[node name="MissionRow3" type="HBoxContainer" parent="MissionsPanel/SeasonList" unique_id=621877440]
+layout_mode = 2
+
+[node name="DescLabel" type="Label" parent="MissionsPanel/SeasonList/MissionRow3" unique_id=2093040212]
+layout_mode = 2
+text = "Juega 10 partidas (0/10)"
+
+[node name="GoButton" type="Button" parent="MissionsPanel/SeasonList/MissionRow3" unique_id=566968174]
+layout_mode = 2
+disabled = true
+text = "Vamos"
 
 [node name="MePanel" type="Control" parent="." unique_id=323737926]
 visible = false
