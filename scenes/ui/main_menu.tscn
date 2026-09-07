@@ -128,14 +128,6 @@ text = "Misiones"
 layout_mode = 2
 text = "🪙 0"
 
-[node name="SettingsButton" type="Button" parent="MissionsPanel/Header" unique_id=1357717743]
-layout_mode = 2
-text = "⚙️"
-
-[node name="CloseButton" type="Button" parent="MissionsPanel/Header" unique_id=1669520503]
-layout_mode = 2
-text = "✖️"
-
 [node name="PlaceholderLabel" type="Label" parent="MissionsPanel" unique_id=1867664219]
 layout_mode = 1
 anchors_preset = 8
@@ -150,6 +142,30 @@ offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
 text = "Próximamente"
+
+[node name="SettingsButton" type="Button" parent="MissionsPanel" unique_id=1357717743]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -30.0
+offset_bottom = 31.0
+grow_horizontal = 0
+text = "⚙️"
+
+[node name="CloseButton" type="Button" parent="MissionsPanel" unique_id=1669520503]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -15.0
+offset_top = -31.0
+offset_right = 15.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "✖️"
 
 [node name="MePanel" type="Control" parent="." unique_id=323737926]
 visible = false
@@ -183,14 +199,6 @@ text = "Yo"
 layout_mode = 2
 text = "🪙 0"
 
-[node name="SettingsButton" type="Button" parent="MePanel/Header" unique_id=1849925865]
-layout_mode = 2
-text = "⚙️"
-
-[node name="CloseButton" type="Button" parent="MePanel/Header" unique_id=729468581]
-layout_mode = 2
-text = "✖️"
-
 [node name="PlaceholderLabel" type="Label" parent="MePanel" unique_id=8884783]
 layout_mode = 1
 anchors_preset = 8
@@ -205,6 +213,30 @@ offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
 text = "Próximamente"
+
+[node name="SettingsButton" type="Button" parent="MePanel" unique_id=1849925865]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -30.0
+offset_bottom = 31.0
+grow_horizontal = 0
+text = "⚙️"
+
+[node name="CloseButton" type="Button" parent="MePanel" unique_id=729468581]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -15.0
+offset_top = -31.0
+offset_right = 15.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "✖️"
 
 [node name="StorePanel" type="Control" parent="." unique_id=1897597045]
 visible = false
@@ -238,14 +270,6 @@ text = "Tienda"
 layout_mode = 2
 text = "🪙 0"
 
-[node name="SettingsButton" type="Button" parent="StorePanel/Header" unique_id=356294554]
-layout_mode = 2
-text = "⚙️"
-
-[node name="CloseButton" type="Button" parent="StorePanel/Header" unique_id=889108527]
-layout_mode = 2
-text = "✖️"
-
 [node name="PlaceholderLabel" type="Label" parent="StorePanel" unique_id=197496598]
 layout_mode = 1
 anchors_preset = 8
@@ -260,6 +284,30 @@ offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
 text = "Próximamente"
+
+[node name="SettingsButton" type="Button" parent="StorePanel" unique_id=356294554]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -30.0
+offset_bottom = 31.0
+grow_horizontal = 0
+text = "⚙️"
+
+[node name="CloseButton" type="Button" parent="StorePanel" unique_id=889108527]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -15.0
+offset_top = -31.0
+offset_right = 15.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "✖️"
 
 [node name="ConfigPanel" type="Control" parent="." unique_id=791883173]
 visible = false
@@ -289,10 +337,6 @@ grow_horizontal = 2
 layout_mode = 2
 text = "Configuración"
 
-[node name="CloseButton" type="Button" parent="ConfigPanel/Header" unique_id=161476939]
-layout_mode = 2
-text = "✖️"
-
 [node name="PlaceholderLabel" type="Label" parent="ConfigPanel" unique_id=371565979]
 layout_mode = 1
 anchors_preset = 8
@@ -307,3 +351,17 @@ offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
 text = "Próximamente"
+
+[node name="CloseButton" type="Button" parent="ConfigPanel" unique_id=161476939]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -15.0
+offset_top = -31.0
+offset_right = 15.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "✖️"

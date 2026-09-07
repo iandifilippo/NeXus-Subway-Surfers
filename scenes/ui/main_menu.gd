@@ -43,20 +43,20 @@ func _ready() -> void:
 	$HomeView/BottomIcons/MeButton.pressed.connect(_on_me_pressed)
 	$HomeView/BottomIcons/StoreButton.pressed.connect(_on_store_pressed)
 
-	# Cada panel (menos Configuración) tiene su propio botón de
+		# Cada panel (menos Configuración) tiene su propio botón de
 	# engranaje: los tres llevan al mismo sitio, por eso reutilizan
-	# _on_settings_pressed en vez de tener una función cada uno.
-	$MissionsPanel/Header/SettingsButton.pressed.connect(_on_settings_pressed)
-	$MePanel/Header/SettingsButton.pressed.connect(_on_settings_pressed)
-	$StorePanel/Header/SettingsButton.pressed.connect(_on_settings_pressed)
+	# _on_settings_pressed en vez de tener una función cada una.
+	$MissionsPanel/SettingsButton.pressed.connect(_on_settings_pressed)
+	$MePanel/SettingsButton.pressed.connect(_on_settings_pressed)
+	$StorePanel/SettingsButton.pressed.connect(_on_settings_pressed)
 
 	# Las X de Misiones, Yo y Tienda siempre vuelven al inicio.
-	$MissionsPanel/Header/CloseButton.pressed.connect(_on_close_pressed)
-	$MePanel/Header/CloseButton.pressed.connect(_on_close_pressed)
-	$StorePanel/Header/CloseButton.pressed.connect(_on_close_pressed)
+	$MissionsPanel/CloseButton.pressed.connect(_on_close_pressed)
+	$MePanel/CloseButton.pressed.connect(_on_close_pressed)
+	$StorePanel/CloseButton.pressed.connect(_on_close_pressed)
 	# La X de Configuración es distinta: vuelve a "previous_view", no
 	# siempre al inicio.
-	$ConfigPanel/Header/CloseButton.pressed.connect(_on_config_close_pressed)
+	$ConfigPanel/CloseButton.pressed.connect(_on_config_close_pressed)
 
 	show_only(home_view)
 
