@@ -180,6 +180,7 @@ func prefill(z: float) -> void:
 			var obs: Node3D = scene.instantiate() as Node3D   # Instancia el nodo del obstáculo
 			add_child(obs)                                    # Lo añade a la escena principal
 			obs.position = Vector3(lane_to_x(lane), 0.0, z)   # Posiciona el obstáculo en el carril y coordenada Z indicada
+			_variar_color_obstaculo(obs)
 
 
 # Genera obstáculos dinámicamente durante el avance del juego
@@ -207,6 +208,7 @@ func spawn_obstacle() -> void:
 			var obs: Node3D = scene.instantiate() as Node3D   # Instancia la escena
 			add_child(obs)                                    # Agrega el obstáculo al árbol de la escena
 			obs.position = Vector3(lane_to_x(lane), 0.0, SPAWN_Z) # Posiciona el obstáculo en X y en la profundidad SPAWN_Z
+			_variar_color_obstaculo(obs)
 			if scene == TRAIN_SCENE:                          # Si el obstáculo instanciado es un tren
 				blocked_lanes[lane] = TRAIN_LENGTH            # Registra el carril como bloqueado durante la longitud del tren
 
@@ -276,7 +278,43 @@ func _on_coin_collected() -> void:
 
 # Convierte un carril (0, 1, 2) a su posición real en metros en el eje X
 func lane_to_x(lane: int) -> float:
-	return (float(lane) - 1.0) * LANE_WIDTH                   # Mapea 0 a -2.0, 1 a 0.0, y 2 a 2.0
+	return (float(lane) - 1.0) * LANE_WIDTH 
+	
+# --- Sesión 16: Materiales ---
+
+func _dar_material_propio(mesh_instance: MeshInstance3D) -> void:
+	var base_material := mesh_instance.get_active_material(0)
+	if base_material == null:
+		return
+	var propio := base_material.duplicate()
+	mesh_instance.set_surface_override_material(0, propio)
+
+
+static func cambiar_material(mesh_instance: MeshInstance3D, propiedad: String, valor) -> bool:
+	if mesh_instance == null:
+		return false
+	var material := mesh_instance.get_surface_override_material(0)
+	if material == null:
+		return false
+	material.set(propiedad, valor)
+	return true
+
+
+const OBSTACLE_COLORS: Array[Color] = [
+	Color(0.471, 1.0, 1.0, 1.0),
+	Color(0.376, 0.182, 0.336, 1.0),
+	Color(0.941, 0.254, 0.935, 1.0),
+	Color(0.993, 0.796, 0.894, 1.0),
+]
+
+
+func _variar_color_obstaculo(obs: Node3D) -> void:
+	var mesh_instance := obs.get_node_or_null("MeshInstance3D") as MeshInstance3D
+	if mesh_instance == null:
+		return
+	_dar_material_propio(mesh_instance)
+	var color: Color = OBSTACLE_COLORS.pick_random()
+	cambiar_material(mesh_instance, "albedo_color", color)                  # Mapea 0 a -2.0, 1 a 0.0, y 2 a 2.0
 
 
 # Captura las entradas globales del teclado para el menú de pausa
