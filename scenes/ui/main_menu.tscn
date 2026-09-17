@@ -1,0 +1,701 @@
+[gd_scene format=3 uid="uid://b3v8fc1m3jbdb"]
+
+[ext_resource type="Script" uid="uid://bgrgdqx73iyp0" path="res://scenes/ui/main_menu.gd" id="1_sl1te"]
+[ext_resource type="Texture2D" uid="uid://4phb44n78cxa" path="res://assets/models/player/ref2.png" id="2_fe2o3"]
+
+[node name="MainMenu" type="Control" unique_id=1371470280]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_sl1te")
+
+[node name="Background" type="ColorRect" parent="." unique_id=364833693]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.003921569)
+
+[node name="HomeView" type="Control" parent="." unique_id=636177894]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="AvatarRecord" type="HBoxContainer" parent="HomeView" unique_id=1473857537]
+layout_mode = 1
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="AvatarIcon" type="ColorRect" parent="HomeView/AvatarRecord" unique_id=179776139]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+color = Color(0, 0, 0, 0.6392157)
+
+[node name="InfoBox" type="VBoxContainer" parent="HomeView/AvatarRecord" unique_id=1394094740]
+layout_mode = 2
+
+[node name="RecordLabel" type="Label" parent="HomeView/AvatarRecord/InfoBox" unique_id=1575133167]
+layout_mode = 2
+text = "Mejor Puntuación: 0 m"
+
+[node name="CoinLabel" type="Label" parent="HomeView/AvatarRecord/InfoBox" unique_id=1030323896]
+layout_mode = 2
+text = "🪙 0"
+
+[node name="SettingsButton" type="Button" parent="HomeView" unique_id=110501292]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -30.0
+offset_bottom = 31.0
+grow_horizontal = 0
+text = "⚙️"
+
+[node name="PlayButton" type="Button" parent="HomeView" unique_id=29046179]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -64.0
+offset_top = -15.5
+offset_right = 64.0
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Toca para jugar"
+
+[node name="BottomIcons" type="HBoxContainer" parent="HomeView" unique_id=812576340]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="MissionsButton" type="Button" parent="HomeView/BottomIcons" unique_id=29050841]
+layout_mode = 2
+text = "⭐ Misiones"
+
+[node name="MeButton" type="Button" parent="HomeView/BottomIcons" unique_id=1272665087]
+layout_mode = 2
+text = "🧍 Yo"
+
+[node name="StoreButton" type="Button" parent="HomeView/BottomIcons" unique_id=799055231]
+layout_mode = 2
+text = "🛒 Tienda"
+
+[node name="TutorialButton" type="Button" parent="HomeView/BottomIcons" unique_id=1253783499]
+layout_mode = 2
+text = "❓ Cómo jugar"
+
+[node name="MissionsPanel" type="Control" parent="." unique_id=1210552001]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="MissionsPanel" unique_id=1363362235]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.003921569)
+
+[node name="Header" type="HBoxContainer" parent="MissionsPanel" unique_id=173218967]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+
+[node name="TitleLabel" type="Label" parent="MissionsPanel/Header" unique_id=1256610317]
+layout_mode = 2
+text = "Misiones"
+
+[node name="CoinLabel" type="Label" parent="MissionsPanel/Header" unique_id=1447319068]
+layout_mode = 2
+text = "🪙 0"
+
+[node name="SettingsButton" type="Button" parent="MissionsPanel" unique_id=1357717743]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -30.0
+offset_bottom = 31.0
+grow_horizontal = 0
+text = "⚙️"
+
+[node name="CloseButton" type="Button" parent="MissionsPanel" unique_id=1669520503]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -15.0
+offset_top = -31.0
+offset_right = 15.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "✖️"
+
+[node name="TabButtons" type="HBoxContainer" parent="MissionsPanel" unique_id=1200603678]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -147.0
+offset_right = 147.0
+offset_bottom = 31.0
+grow_horizontal = 2
+
+[node name="DailyTabButton" type="Button" parent="MissionsPanel/TabButtons" unique_id=994887489]
+layout_mode = 2
+text = "Objetivo diario"
+
+[node name="SeasonTabButton" type="Button" parent="MissionsPanel/TabButtons" unique_id=579504264]
+layout_mode = 2
+text = "Objetivo Temporada"
+
+[node name="DailyList" type="VBoxContainer" parent="MissionsPanel" unique_id=1451799193]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MissionRow1" type="HBoxContainer" parent="MissionsPanel/DailyList" unique_id=1864098337]
+layout_mode = 2
+
+[node name="DescLabel" type="Label" parent="MissionsPanel/DailyList/MissionRow1" unique_id=810999070]
+layout_mode = 2
+text = "Recoge 50 monedas (0/50)"
+
+[node name="GoButton" type="Button" parent="MissionsPanel/DailyList/MissionRow1" unique_id=408488309]
+layout_mode = 2
+disabled = true
+text = "Vamos"
+
+[node name="MissionRow2" type="HBoxContainer" parent="MissionsPanel/DailyList" unique_id=888328931]
+layout_mode = 2
+
+[node name="DescLabel" type="Label" parent="MissionsPanel/DailyList/MissionRow2" unique_id=1224042401]
+layout_mode = 2
+text = "Ve a 500 metros de distancia (0/500)"
+
+[node name="GoButton" type="Button" parent="MissionsPanel/DailyList/MissionRow2" unique_id=1605763492]
+layout_mode = 2
+disabled = true
+text = "Vamos"
+
+[node name="MissionRow3" type="HBoxContainer" parent="MissionsPanel/DailyList" unique_id=38561100]
+layout_mode = 2
+
+[node name="DescLabel" type="Label" parent="MissionsPanel/DailyList/MissionRow3" unique_id=1981455767]
+layout_mode = 2
+text = "Recoge 100 monedas (0/100)"
+
+[node name="GoButton" type="Button" parent="MissionsPanel/DailyList/MissionRow3" unique_id=879934829]
+layout_mode = 2
+disabled = true
+text = "Vamos"
+
+[node name="SeasonList" type="VBoxContainer" parent="MissionsPanel" unique_id=1416273533]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MissionRow1" type="HBoxContainer" parent="MissionsPanel/SeasonList" unique_id=71120198]
+layout_mode = 2
+
+[node name="DescLabel" type="Label" parent="MissionsPanel/SeasonList/MissionRow1" unique_id=938716214]
+layout_mode = 2
+text = "Recoge 1000 monedas en la temporada (0/1000)"
+
+[node name="GoButton" type="Button" parent="MissionsPanel/SeasonList/MissionRow1" unique_id=1585850852]
+layout_mode = 2
+disabled = true
+text = "Vamos"
+
+[node name="MissionRow2" type="HBoxContainer" parent="MissionsPanel/SeasonList" unique_id=84196709]
+layout_mode = 2
+
+[node name="DescLabel" type="Label" parent="MissionsPanel/SeasonList/MissionRow2" unique_id=2018909715]
+layout_mode = 2
+text = "Alcanza 5000 metros acumulados (0/5000)"
+
+[node name="GoButton" type="Button" parent="MissionsPanel/SeasonList/MissionRow2" unique_id=650788088]
+layout_mode = 2
+disabled = true
+text = "Vamos"
+
+[node name="MissionRow3" type="HBoxContainer" parent="MissionsPanel/SeasonList" unique_id=621877440]
+layout_mode = 2
+
+[node name="DescLabel" type="Label" parent="MissionsPanel/SeasonList/MissionRow3" unique_id=2093040212]
+layout_mode = 2
+text = "Juega 10 partidas (0/10)"
+
+[node name="GoButton" type="Button" parent="MissionsPanel/SeasonList/MissionRow3" unique_id=566968174]
+layout_mode = 2
+disabled = true
+text = "Vamos"
+
+[node name="MePanel" type="Control" parent="." unique_id=323737926]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="MePanel" unique_id=137209784]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.003921569)
+
+[node name="Header" type="HBoxContainer" parent="MePanel" unique_id=595009408]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+
+[node name="TitleLabel" type="Label" parent="MePanel/Header" unique_id=1258301265]
+layout_mode = 2
+text = "Yo"
+
+[node name="CoinLabel" type="Label" parent="MePanel/Header" unique_id=1218519643]
+layout_mode = 2
+text = "🪙 0"
+
+[node name="SettingsButton" type="Button" parent="MePanel" unique_id=1849925865]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -30.0
+offset_bottom = 31.0
+grow_horizontal = 0
+text = "⚙️"
+
+[node name="CloseButton" type="Button" parent="MePanel" unique_id=729468581]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -15.0
+offset_top = -31.0
+offset_right = 15.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "✖️"
+
+[node name="CharacterBox" type="VBoxContainer" parent="MePanel" unique_id=576685173]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CharacterNameLabel" type="Label" parent="MePanel/CharacterBox" unique_id=966597710]
+layout_mode = 2
+text = "Jake"
+
+[node name="CharacterCarousel" type="HBoxContainer" parent="MePanel/CharacterBox" unique_id=827293481]
+layout_mode = 2
+
+[node name="PrevButton" type="Button" parent="MePanel/CharacterBox/CharacterCarousel" unique_id=2085416238]
+layout_mode = 2
+disabled = true
+text = "<"
+
+[node name="NextButton" type="Button" parent="MePanel/CharacterBox/CharacterCarousel" unique_id=1516644722]
+layout_mode = 2
+disabled = true
+text = ">"
+
+[node name="CharacterImage" type="TextureRect" parent="MePanel/CharacterBox" unique_id=1244016896]
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 2
+texture = ExtResource("2_fe2o3")
+
+[node name="ComingSoonLabel" type="Label" parent="MePanel/CharacterBox" unique_id=683687267]
+layout_mode = 2
+text = "Más personajes próximamente"
+
+[node name="SelectedButton" type="Button" parent="MePanel/CharacterBox" unique_id=772829435]
+layout_mode = 2
+disabled = true
+text = "Seleccionado"
+
+[node name="StorePanel" type="Control" parent="." unique_id=1897597045]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="StorePanel" unique_id=1786822115]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.003921569)
+
+[node name="Header" type="HBoxContainer" parent="StorePanel" unique_id=1482971528]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+
+[node name="TitleLabel" type="Label" parent="StorePanel/Header" unique_id=1519825350]
+layout_mode = 2
+text = "Tienda"
+
+[node name="CoinLabel" type="Label" parent="StorePanel/Header" unique_id=1928039927]
+layout_mode = 2
+text = "🪙 0"
+
+[node name="SettingsButton" type="Button" parent="StorePanel" unique_id=356294554]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -30.0
+offset_bottom = 31.0
+grow_horizontal = 0
+text = "⚙️"
+
+[node name="CloseButton" type="Button" parent="StorePanel" unique_id=889108527]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -15.0
+offset_top = -31.0
+offset_right = 15.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "✖️"
+
+[node name="ItemsBox" type="VBoxContainer" parent="StorePanel" unique_id=130197479]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="FreeGiftRow" type="HBoxContainer" parent="StorePanel/ItemsBox" unique_id=485667021]
+layout_mode = 2
+
+[node name="FreeGiftLabel" type="Label" parent="StorePanel/ItemsBox/FreeGiftRow" unique_id=1218652824]
+layout_mode = 2
+text = "Regalo gratis"
+
+[node name="FreeGiftButton" type="Button" parent="StorePanel/ItemsBox/FreeGiftRow" unique_id=221721861]
+layout_mode = 2
+text = "Reclamar"
+
+[node name="CrateRow1" type="HBoxContainer" parent="StorePanel/ItemsBox" unique_id=1324603677]
+layout_mode = 2
+
+[node name="Crate1Label" type="Label" parent="StorePanel/ItemsBox/CrateRow1" unique_id=443816371]
+layout_mode = 2
+text = "Caja pequeña — 50 monedas"
+
+[node name="Crate1Button" type="Button" parent="StorePanel/ItemsBox/CrateRow1" unique_id=2018911281]
+layout_mode = 2
+text = "Comprar"
+
+[node name="CrateRow2" type="HBoxContainer" parent="StorePanel/ItemsBox" unique_id=121024399]
+layout_mode = 2
+
+[node name="Crate2Label" type="Label" parent="StorePanel/ItemsBox/CrateRow2" unique_id=1298612069]
+layout_mode = 2
+text = "Caja grande — 150 monedas"
+
+[node name="Crate2Button" type="Button" parent="StorePanel/ItemsBox/CrateRow2" unique_id=433538830]
+layout_mode = 2
+text = "Comprar"
+
+[node name="StatusLabel" type="Label" parent="StorePanel/ItemsBox" unique_id=1047228001]
+layout_mode = 2
+
+[node name="ConfigPanel" type="Control" parent="." unique_id=791883173]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="ConfigPanel" unique_id=2126359707]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.003921569)
+
+[node name="Header" type="HBoxContainer" parent="ConfigPanel" unique_id=1215819696]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+
+[node name="TitleLabel" type="Label" parent="ConfigPanel/Header" unique_id=173845561]
+layout_mode = 2
+text = "Configuración"
+
+[node name="CloseButton" type="Button" parent="ConfigPanel" unique_id=161476939]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -15.0
+offset_top = -31.0
+offset_right = 15.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "✖️"
+
+[node name="SettingsBox" type="VBoxContainer" parent="ConfigPanel" unique_id=497690500]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PlayGamesRow" type="HBoxContainer" parent="ConfigPanel/SettingsBox" unique_id=47977442]
+layout_mode = 2
+
+[node name="PlayGamesLabel" type="Label" parent="ConfigPanel/SettingsBox/PlayGamesRow" unique_id=932867246]
+layout_mode = 2
+text = "Play Game"
+
+[node name="PlayGamesButton" type="Button" parent="ConfigPanel/SettingsBox/PlayGamesRow" unique_id=1201419124]
+layout_mode = 2
+text = "Conectar"
+
+[node name="FacebookRow" type="HBoxContainer" parent="ConfigPanel/SettingsBox" unique_id=701235032]
+layout_mode = 2
+
+[node name="FacebookLabel" type="Label" parent="ConfigPanel/SettingsBox/FacebookRow" unique_id=621837119]
+layout_mode = 2
+text = "Facebook"
+
+[node name="FacebookButton" type="Button" parent="ConfigPanel/SettingsBox/FacebookRow" unique_id=728307758]
+layout_mode = 2
+text = "Conectar"
+
+[node name="StereoRow" type="HBoxContainer" parent="ConfigPanel/SettingsBox" unique_id=1184782526]
+layout_mode = 2
+
+[node name="StereoLabel" type="Label" parent="ConfigPanel/SettingsBox/StereoRow" unique_id=456700567]
+layout_mode = 2
+text = "Estéreo"
+
+[node name="StereoToggle" type="CheckButton" parent="ConfigPanel/SettingsBox/StereoRow" unique_id=843775641]
+layout_mode = 2
+
+[node name="MusicRow" type="HBoxContainer" parent="ConfigPanel/SettingsBox" unique_id=1831688973]
+layout_mode = 2
+
+[node name="MusicLabel" type="Label" parent="ConfigPanel/SettingsBox/MusicRow" unique_id=58332761]
+layout_mode = 2
+text = "Música"
+
+[node name="MusicSlider" type="HSlider" parent="ConfigPanel/SettingsBox/MusicRow" unique_id=859474921]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+
+[node name="SfxRow" type="HBoxContainer" parent="ConfigPanel/SettingsBox" unique_id=188120214]
+layout_mode = 2
+
+[node name="SfxLabel" type="Label" parent="ConfigPanel/SettingsBox/SfxRow" unique_id=1304082899]
+layout_mode = 2
+text = "Efectos de sonido"
+
+[node name="SfxSlider" type="HSlider" parent="ConfigPanel/SettingsBox/SfxRow" unique_id=1086523532]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+
+[node name="TutorialPanel" type="Control" parent="." unique_id=624952331]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="TutorialPanel" unique_id=1674816263]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0, 0, 0, 0.003921569)
+
+[node name="Header" type="HBoxContainer" parent="TutorialPanel" unique_id=2033652984]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+
+[node name="TitleLabel" type="Label" parent="TutorialPanel/Header" unique_id=708570001]
+layout_mode = 2
+text = "Cómo jugar"
+
+[node name="CloseButton" type="Button" parent="TutorialPanel" unique_id=243443968]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -15.0
+offset_top = -31.0
+offset_right = 15.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "✖️"
+
+[node name="ControlsList" type="VBoxContainer" parent="TutorialPanel" unique_id=290086117]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ControlRow1" type="HBoxContainer" parent="TutorialPanel/ControlsList" unique_id=497217138]
+layout_mode = 2
+
+[node name="KeyLabel" type="Label" parent="TutorialPanel/ControlsList/ControlRow1" unique_id=1445400935]
+layout_mode = 2
+text = "← / A"
+
+[node name="ActionLabel" type="Label" parent="TutorialPanel/ControlsList/ControlRow1" unique_id=570656651]
+layout_mode = 2
+text = "Moverse a la izquierda"
+
+[node name="ControlRow2" type="HBoxContainer" parent="TutorialPanel/ControlsList" unique_id=1907006193]
+layout_mode = 2
+
+[node name="KeyLabel" type="Label" parent="TutorialPanel/ControlsList/ControlRow2" unique_id=1499194201]
+layout_mode = 2
+text = "→ / D"
+
+[node name="ActionLabel" type="Label" parent="TutorialPanel/ControlsList/ControlRow2" unique_id=2023889585]
+layout_mode = 2
+text = "Moverse a la derecha"
+
+[node name="ControlRow3" type="HBoxContainer" parent="TutorialPanel/ControlsList" unique_id=2097553591]
+layout_mode = 2
+
+[node name="KeyLabel" type="Label" parent="TutorialPanel/ControlsList/ControlRow3" unique_id=2008844090]
+layout_mode = 2
+text = "↑ / W"
+
+[node name="ActionLabel" type="Label" parent="TutorialPanel/ControlsList/ControlRow3" unique_id=1723195750]
+layout_mode = 2
+text = "Saltar"
+
+[node name="ControlRow4" type="HBoxContainer" parent="TutorialPanel/ControlsList" unique_id=1979004732]
+layout_mode = 2
+
+[node name="KeyLabel" type="Label" parent="TutorialPanel/ControlsList/ControlRow4" unique_id=3212961]
+layout_mode = 2
+text = "↓ / S"
+
+[node name="ActionLabel" type="Label" parent="TutorialPanel/ControlsList/ControlRow4" unique_id=578195395]
+layout_mode = 2
+text = "Rodar / agacharse"
+
+[node name="ControlRow5" type="HBoxContainer" parent="TutorialPanel/ControlsList" unique_id=593457946]
+layout_mode = 2
+
+[node name="KeyLabel" type="Label" parent="TutorialPanel/ControlsList/ControlRow5" unique_id=274487090]
+layout_mode = 2
+text = "	P"
+
+[node name="ActionLabel" type="Label" parent="TutorialPanel/ControlsList/ControlRow5" unique_id=1047410389]
+layout_mode = 2
+text = "Pausar el juego"

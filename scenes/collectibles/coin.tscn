@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://cy6gx5pu2fgfp"]
+
+[ext_resource type="Script" uid="uid://1c0awx84nux" path="res://scenes/collectibles/coin.gd" id="1_qygne"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lewmy"]
+albedo_color = Color(1, 0.78431374, 0.15686275, 1)
+metallic = 0.9
+metallic_specular = 0.8
+roughness = 0.25
+emission_enabled = true
+emission = Color(1, 0.627451, 0.078431375, 1)
+emission_energy_multiplier = 0.4
+
+[sub_resource type="SphereMesh" id="SphereMesh_cnqkh"]
+radius = 0.25
+height = 0.5
+radial_segments = 12
+rings = 6
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_etmoi"]
+radius = 0.6
+
+[node name="Coin" type="Area3D" unique_id=1111016129 groups=["coin"]]
+collision_layer = 8
+script = ExtResource("1_qygne")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=407892560]
+material_override = SubResource("StandardMaterial3D_lewmy")
+mesh = SubResource("SphereMesh_cnqkh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1071043965]
+shape = SubResource("SphereShape3D_etmoi")
