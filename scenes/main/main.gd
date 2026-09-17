@@ -29,6 +29,15 @@ const OBSTACLES: Array[PackedScene] = [ # Lista de escenas de obstáculos dispon
 
 const TRAIN_LENGTH: float = 12.0  # Longitud del tren en metros para calcular el bloqueo de carril
 
+## --- Materiales: variación visual de obstáculos (Sesión 16) ---
+const OBSTACLE_TINT_COLORS: Array[Color] = [ # Paleta de tintes posibles para los obstáculos
+	Color(1.0, 1.0, 1.0),   # Blanco: prácticamente el color original, sin tinte
+	Color(1.0, 0.6, 0.6),   # Rojizo
+	Color(0.6, 0.8, 1.0),   # Azulado
+	Color(0.7, 1.0, 0.7),   # Verdoso
+	Color(1.0, 0.85, 0.4),  # Amarillento
+]
+
 ## --- Monedas ---
 const COIN_SCENE := preload("res://scenes/collectibles/coin.tscn") # Carga la escena base de la moneda
 const COIN_HEIGHT: float = 1.0     # Altura en Y a la que flotan las monedas
@@ -180,6 +189,7 @@ func prefill(z: float) -> void:
 			var obs: Node3D = scene.instantiate() as Node3D   # Instancia el nodo del obstáculo
 			add_child(obs)                                    # Lo añade a la escena principal
 			obs.position = Vector3(lane_to_x(lane), 0.0, z)   # Posiciona el obstáculo en el carril y coordenada Z indicada
+			apply_random_tint(obs, scene)                     # Le da un color propio, sin afectar a los demás obstáculos
 
 
 # Genera obstáculos dinámicamente durante el avance del juego
@@ -207,8 +217,25 @@ func spawn_obstacle() -> void:
 			var obs: Node3D = scene.instantiate() as Node3D   # Instancia la escena
 			add_child(obs)                                    # Agrega el obstáculo al árbol de la escena
 			obs.position = Vector3(lane_to_x(lane), 0.0, SPAWN_Z) # Posiciona el obstáculo en X y en la profundidad SPAWN_Z
+			apply_random_tint(obs, scene)                     # Le da un color propio, sin afectar a los demás obstáculos
 			if scene == TRAIN_SCENE:                          # Si el obstáculo instanciado es un tren
 				blocked_lanes[lane] = TRAIN_LENGTH            # Registra el carril como bloqueado durante la longitud del tren
+
+
+# Le da a este obstáculo un tinte de color propio, sin afectar a las demás
+# instancias de la misma escena — evita el problema de material compartido
+# de la Sesión 16: cambiarle el color a una copia no debe cambiárselo a
+# todas. El tren queda afuera a propósito: su textura ya lo identifica
+# como tren, tintarlo se vería raro.
+func apply_random_tint(obs: Node3D, scene: PackedScene) -> void:
+	if scene == TRAIN_SCENE:                                  # No tintamos el tren
+		return
+	var mesh_instance: MeshInstance3D = obs.get_node_or_null("MeshInstance3D") # Busca el mesh visual del obstáculo
+	if mesh_instance == null or mesh_instance.mesh == null:   # Si por alguna razón no tiene mesh
+		return                                                # No hace nada, evita un error
+	var propio: StandardMaterial3D = mesh_instance.mesh.surface_get_material(0).duplicate() # Copia el material, no lo comparte
+	propio.albedo_color = OBSTACLE_TINT_COLORS.pick_random()  # Le asigna un color al azar de la paleta
+	mesh_instance.set_surface_override_material(0, propio)    # Aplica el material duplicado solo a esta instancia
 
 
 # Genera patrones de monedas en el mapa
@@ -264,8 +291,8 @@ func recycle(chunk: Node3D) -> void:
 
 # Gestiona la muerte del jugador y la interrupción de la partida
 func _on_player_died() -> void:
-	running = false
-	GameData.report_run_result(distance, coins)                                           # Detiene el bucle principal cambiando la bandera a false
+	running = false                                           # Detiene el bucle principal cambiando la bandera a false
+	GameData.report_run_result(distance, coins)               # Guarda el resultado de la partida en el Autoload
 	game_over.show_game_over(distance, coins)                 # Muestra la interfaz de Game Over enviando el puntaje final
 
 
