@@ -158,6 +158,9 @@ func register_impact() -> void:
 		is_stumbled = true                                    # Activa la bandera de estado tropezado
 		speed_multiplier = 0.5                                # Reduce la velocidad actual a la mitad instantáneamente
 		stumble_timer.start()                                 # Inicia la cuenta regresiva de 10 segundos del temporizador
+		
+		if player.has_node("WarningLight"):        # Si el jugador tiene la luz de advertencia
+			player.get_node("WarningLight").flash_alert() # La hace destellar en rojo
 
 		if player.has_method("play_stumble_anim"):            # Comprueba si el script del jugador tiene una animación de tropiezo
 			player.play_stumble_anim()                        # Ejecuta la animación de tropiezo en el jugador
@@ -271,7 +274,9 @@ func _on_player_died() -> void:
 
 # Suma las monedas recolectadas cuando el jugador emite la señal
 func _on_coin_collected() -> void:
-	coins += 1                                                # Incrementa el contador global de monedas en 1
+	coins += 1
+	if player.has_node("WarningLight"):        # Reutilizamos la misma luz
+		player.get_node("WarningLight").flash_alert() # Destella al recoger una moneda                                         # Incrementa el contador global de monedas en 1
 
 
 # Convierte un carril (0, 1, 2) a su posición real en metros en el eje X

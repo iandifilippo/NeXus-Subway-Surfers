@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://ga5f26agc7p7" path="res://scenes/player/player.tscn" id="1_o5qli"]
 [ext_resource type="Script" uid="uid://0apeneven5m1" path="res://scenes/main/main.gd" id="1_sugp2"]
 [ext_resource type="PackedScene" uid="uid://b2jrbsxgpu238" path="res://scenes/ui/game_over.tscn" id="3_k2fmo"]
+[ext_resource type="Script" uid="uid://bjm8xnphvguj1" path="res://scenes/main/warning_light.gd" id="3_ow5a4"]
 [ext_resource type="PackedScene" uid="uid://ca6vqiswrfofb" path="res://scenes/ui/hud.tscn" id="4_l3cfh"]
 [ext_resource type="PackedScene" uid="uid://bjvejy2nh1jld" path="res://scenes/ui/pause_menu.tscn" id="5_6q06x"]
 
@@ -34,6 +35,10 @@ shadow_enabled = true
 transform = Transform3D(1, 0, 0, 0, 0.9063077, 0.42261824, 0, -0.42261824, 0.9063077, 0, 6.5, 6)
 
 [node name="Player" parent="." unique_id=194294277 instance=ExtResource("1_o5qli")]
+
+[node name="WarningLight" type="OmniLight3D" parent="Player" unique_id=1573121715]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+script = ExtResource("3_ow5a4")
 
 [node name="GameOver" parent="." unique_id=1999420787 instance=ExtResource("3_k2fmo")]
 
