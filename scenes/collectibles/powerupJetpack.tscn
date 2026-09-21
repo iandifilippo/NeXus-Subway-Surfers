@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://47vi4jj7voxq"]
+
+[ext_resource type="Script" uid="uid://bbd5p50fnmkfo" path="res://scenes/collectibles/powerup.gd" id="1_q3r4q"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_bm02b"]
+radius = 0.3
+height = 0.8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7yjhc"]
+albedo_color = Color(0.14901961, 0.65882355, 1, 1)
+metallic = 0.7
+roughness = 0.2
+emission_enabled = true
+emission = Color(0.2, 0.6, 1, 1)
+emission_energy_multiplier = 1.2
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_bm02b"]
+radius = 0.6
+
+[node name="PowerupJetpack" type="Area3D" unique_id=1017006090 groups=["powerup"]]
+collision_layer = 8
+script = ExtResource("1_q3r4q")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=466289908]
+mesh = SubResource("CapsuleMesh_bm02b")
+surface_material_override/0 = SubResource("StandardMaterial3D_7yjhc")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1277973576]
+shape = SubResource("SphereShape3D_bm02b")
