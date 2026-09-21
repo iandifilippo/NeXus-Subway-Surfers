@@ -52,6 +52,7 @@ const CAMERA_FOLLOW_SPEED: float = 4.0   # Velocidad de interpolación (lerp) de
 @onready var camera: Camera3D = $Camera3D         # Referencia a la cámara principal 3D
 @onready var player: CharacterBody3D = $Player   # Referencia al personaje del jugador
 @onready var pause_menu: Control = $PauseMenu     # Referencia al menú de pausa
+@onready var luz_impacto: OmniLight3D = $LuzImpacto   # Luz nueva que reacciona a los tropiezos
 
 ## --- Estado de la partida ---
 var speed: float = START_SPEED       # Variable para rastrear la velocidad de progresión global del mundo
@@ -146,6 +147,12 @@ func _process(delta: float) -> void:
 
 	hud.update_hud(coins, distance)                           # Actualiza la interfaz de usuario con monedas y metros
 
+# Cambia una propiedad de una luz por código (Sesión 17)
+static func cambiar_luz(luz: Light3D, propiedad: String, valor) -> bool:
+	if luz == null:
+		return false
+	luz.set(propiedad, valor)
+	return true
 
 # Función encargada de procesar los choques secundarios o tropiezos del jugador
 func register_impact() -> void:
@@ -157,7 +164,9 @@ func register_impact() -> void:
 	else:                                                     # Si es el primer impacto recibido
 		is_stumbled = true                                    # Activa la bandera de estado tropezado
 		speed_multiplier = 0.5                                # Reduce la velocidad actual a la mitad instantáneamente
-		stumble_timer.start()                                 # Inicia la cuenta regresiva de 10 segundos del temporizador
+		stumble_timer.start() 
+		cambiar_luz(luz_impacto, "light_color", Color.RED)   # La luz se vuelve roja al tropezar
+		cambiar_luz(luz_impacto, "light_energy", 8.0)        # Y se intensifica                                # Inicia la cuenta regresiva de 10 segundos del temporizador
 
 		if player.has_method("play_stumble_anim"):            # Comprueba si el script del jugador tiene una animación de tropiezo
 			player.play_stumble_anim()                        # Ejecuta la animación de tropiezo en el jugador
@@ -166,6 +175,8 @@ func register_impact() -> void:
 # Callback invocado automáticamente al finalizar los 10 segundos del temporizador
 func _on_stumble_timeout() -> void:
 	is_stumbled = false                                       # Restablece la bandera para salir del estado de vulnerabilidad
+	cambiar_luz(luz_impacto, "light_color", Color.WHITE)   # Vuelve a la normalidad
+	cambiar_luz(luz_impacto, "light_energy", 3.0)
 
 
 # Rellena el mapa con obstáculos iniciales al arrancar la escena

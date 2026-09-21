@@ -40,3 +40,8 @@ transform = Transform3D(1, 0, 0, 0, 0.9063077, 0.42261824, 0, -0.42261824, 0.906
 [node name="HUD" parent="." unique_id=2063382571 instance=ExtResource("4_l3cfh")]
 
 [node name="PauseMenu" parent="." unique_id=1269575078 instance=ExtResource("5_6q06x")]
+
+[node name="LuzImpacto" type="OmniLight3D" parent="." unique_id=166015606]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -2)
+light_energy = 3.0
+omni_range = 12.0
