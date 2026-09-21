@@ -13,7 +13,7 @@ size = Vector3(0.3, 3, 0.3)
 [sub_resource type="BoxShape3D" id="BoxShape3D_lewmy"]
 size = Vector3(0.3, 3, 0.3)
 
-[node name="Obstacle" type="Area3D" unique_id=1720722703 groups=["obstacle"]]
+[node name="Obstacle" type="Area3D" unique_id=1720722703 groups=["obstacle", "pole"]]
 collision_layer = 4
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=594956829]

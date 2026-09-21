@@ -1,10 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://bvqyr46wwws7f"]
+[gd_scene format=3 uid="uid://bvqyr46wwws7f"]
 
-[ext_resource type="Texture2D" path="res://assets/textures/train_cartoon.png" id="1_tex"]
+[ext_resource type="Texture2D" uid="uid://d3omn1mwkoikn" path="res://assets/textures/train_cartoon.png" id="1_tex"]
 
 [sub_resource type="StandardMaterial3D" id="StdMat_train"]
 albedo_texture = ExtResource("1_tex")
-uv1_scale = Vector3(1, 1, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_cnqkh"]
 material = SubResource("StdMat_train")
@@ -13,7 +12,7 @@ size = Vector3(1.8, 3, 12)
 [sub_resource type="BoxShape3D" id="BoxShape3D_lewmy"]
 size = Vector3(1.8, 3, 12)
 
-[node name="Obstacle" type="Area3D" unique_id=1720722703 groups=["obstacle"]]
+[node name="Obstacle" type="Area3D" unique_id=1720722703 groups=["obstacle", "train"]]
 collision_layer = 4
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=594956829]

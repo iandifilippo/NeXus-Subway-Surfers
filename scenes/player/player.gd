@@ -18,6 +18,16 @@ const SLAM_VELOCITY := -40.0  # Impulso descendente rápido para caer de golpe s
 const FLIGHT_HEIGHT := 3.5  # Altura en Y a la que vuela el jugador, por encima de trenes/vallas
 const FLIGHT_SNAP := 6.0    # Velocidad de ajuste hacia la altura de vuelo (como LANE_SNAP, pero en Y)
 
+## --- Golpe frontal vs. lateral/diagonal contra obstáculos sólidos ---
+## Si el golpe queda a menos de este valor del centro del obstáculo (en
+## X), se considera de frente (mortal). Más lejos —típicamente porque te
+## alcanzó a medio cambiar de carril, rozándolo de costado— es un
+## tropiezo, no muerte. Cada tipo tiene su propio umbral porque son de
+## anchos muy distintos (afinables jugando, no son valores exactos).
+const TRAIN_FRONTAL_THRESHOLD := 0.5   # El tren mide 1.8 de ancho
+const FENCE_FRONTAL_THRESHOLD := 0.4   # La valla mide 1.6 de ancho
+const POLE_FRONTAL_THRESHOLD := 0.1    # El poste mide solo 0.3 de ancho
+
 ## --- Nombres de las animaciones ---
 const ANIM_RUN := "mixamo_com"        # Nombre de la animación base al correr
 const ANIM_JUMP := "jump/mixamo_com"  # Nombre de la animación al saltar
@@ -186,23 +196,20 @@ func _on_hitbox_area_entered(area: Area3D) -> void:
 	if active_powerup == "jetpack" and (area.is_in_group("obstacle") or area.is_in_group("pole") or area.is_in_group("wall") or area.is_in_group("powerup")):
 		return
 
-	if area.is_in_group("obstacle"):                    # Obstáculos mortales (trenes, vallas altas, etc.)
-		die()                                           # Muerte de un golpe
+	# Los tres tipos de obstáculo sólido (tren, valla, poste) comparten
+	# ahora la misma lógica: frente = muerte, lateral/diagonal = tropiezo
+	# + empujón hacia el carril libre más cercano.
+	if area.is_in_group("train"):
+		_resolve_solid_hit(area, TRAIN_FRONTAL_THRESHOLD)
 
-	elif area.is_in_group("pole"):                      # Poste específico (baja velocidad y te mueve de carril)
-		if get_parent().has_method("register_impact"):  # Llama a main.gd para bajar la velocidad general
-			get_parent().register_impact()
+	elif area.is_in_group("fence"):
+		_resolve_solid_hit(area, FENCE_FRONTAL_THRESHOLD)
 
-		# Lógica para empujar al jugador al carril libre sin sacarlo del mapa
-		if current_lane == 0:                           # Si chocó en el carril izquierdo
-			current_lane = 1                            # Lo empuja a salvo hacia el centro
-		elif current_lane == 2:                         # Si chocó en el carril derecho
-			current_lane = 1                            # Lo empuja a salvo hacia el centro
-		elif current_lane == 1:                         # Si chocó en el carril central
-			if area.global_position.x > global_position.x: # Si el poste está a su derecha
-				current_lane = 0                        # Lo empuja hacia la izquierda
-			else:                                       # Si el poste está a su izquierda
-				current_lane = 2                        # Lo empuja hacia la derecha
+	elif area.is_in_group("pole"):
+		_resolve_solid_hit(area, POLE_FRONTAL_THRESHOLD)
+
+	elif area.is_in_group("obstacle"):                  # Cualquier obstáculo sin tipo específico sigue matando directo
+		die()
 
 	elif area.is_in_group("wall"):                      # Paredes laterales de los 3 carriles
 		if get_parent().has_method("register_impact"):  # Llama a main.gd para bajar la velocidad
@@ -217,6 +224,35 @@ func _on_hitbox_area_entered(area: Area3D) -> void:
 		var p_duration: float = area.duration           # Lee cuánto debe durar su efecto
 		area.collect()                                  # Elimina el coleccionable del mundo
 		activate_powerup(p_type, p_duration)             # Activa el efecto correspondiente
+
+
+## Decide si un golpe contra un obstáculo sólido (tren, valla o poste)
+## fue de frente (mata) o lateral/diagonal (tropieza), según qué tan
+## centrado quedó el jugador respecto al obstáculo en el eje X.
+func _resolve_solid_hit(area: Area3D, threshold: float) -> void:
+	var offset_x: float = absf(area.global_position.x - global_position.x)
+	if offset_x < threshold:
+		die()
+	else:
+		if get_parent().has_method("register_impact"):
+			get_parent().register_impact()
+		_push_to_free_lane(area)
+
+
+## Empuja al jugador hacia el carril libre más cercano al que ocupa el
+## obstáculo. Sin esto, como estos obstáculos son Area3D (no bloquean
+## físicamente el movimiento), el jugador quedaba metido dentro de su
+## malla en vez de rebotar hacia un lado.
+func _push_to_free_lane(area: Area3D) -> void:
+	if current_lane == 0:
+		current_lane = 1
+	elif current_lane == 2:
+		current_lane = 1
+	elif current_lane == 1:
+		if area.global_position.x > global_position.x:
+			current_lane = 0
+		else:
+			current_lane = 2
 
 
 ## Activa un power-up genérico durante un tiempo determinado. Si ya había
