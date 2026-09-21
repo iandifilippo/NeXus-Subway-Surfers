@@ -50,6 +50,7 @@ const POWERUP_CHANCE: float = 0.5    # Probabilidad de que, al cumplirse el gap,
 const LANE_WIDTH: float = 2.0
 const SPAWN_Z: float = -150.0
 const SPAWN_GAP: float = 18.0
+const SAFE_LANE_DURATION: int = 3  # Cuántos ciclos seguidos (de SPAWN_GAP cada uno) se mantiene el mismo carril libre antes de poder cambiar a otro. Le da al jugador un tramo real para reaccionar, en vez de que el único carril libre cambie de golpe cada 18 metros — la causa más probable del softlock del #27.
 const DESPAWN_Z: float = 15.0
 
 ## --- Seguimiento lateral de la cámara ---
@@ -73,6 +74,8 @@ var next_coin_spawn: float = 0.0
 var next_powerup_spawn: float = POWERUP_GAP
 var chunks: Array[Node3D] = []
 var blocked_lanes: Dictionary = {}
+var safe_lane: int = 1              # Carril que se mantiene libre de forma sostenida, varios ciclos seguidos
+var safe_lane_cycles_left: int = 0  # Cuántos ciclos más se mantiene igual antes de poder sortear otro
 
 ## --- Estado de tropiezo y choque ---
 var is_stumbled: bool = false
@@ -189,6 +192,15 @@ func spawn_obstacle() -> void:
 		if blocked_lanes[lane] <= 0.0:
 			blocked_lanes.erase(lane)
 
+	# El carril "seguro" se mantiene el mismo varios ciclos seguidos, en
+	# vez de sortearse de nuevo cada vez — así el jugador tiene un tramo
+	# real para reaccionar, en vez de que el único carril libre cambie
+	# de golpe cada 18 metros.
+	if safe_lane_cycles_left <= 0:
+		safe_lane = randi() % 3
+		safe_lane_cycles_left = SAFE_LANE_DURATION
+	safe_lane_cycles_left -= 1
+
 	var free_lanes: Array[int] = []
 	for lane in 3:
 		if not blocked_lanes.has(lane):
@@ -197,7 +209,10 @@ func spawn_obstacle() -> void:
 	if free_lanes.size() <= 1:
 		return
 
-	var keep_free: int = free_lanes.pick_random() as int
+	# El carril seguro normalmente está libre. Si por casualidad quedó
+	# bloqueado por un tren, se usa igual uno libre solo para este ciclo,
+	# sin gastar el contador de "cuántos ciclos lleva siendo seguro".
+	var keep_free: int = safe_lane if free_lanes.has(safe_lane) else free_lanes.pick_random() as int
 
 	for lane in free_lanes:
 		if lane == keep_free:
