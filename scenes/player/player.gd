@@ -14,6 +14,10 @@ const JUMP_VELOCITY := 8.0    # Fuerza del impulso vertical al saltar
 const ROLL_TIME := 1.0        # Tiempo total del deslizamiento en segundos
 const SLAM_VELOCITY := -40.0  # Impulso descendente rápido para caer de golpe si se rueda en el aire
 
+## --- Vuelo (jetpack) ---
+const FLIGHT_HEIGHT := 3.5  # Altura en Y a la que vuela el jugador, por encima de trenes/vallas
+const FLIGHT_SNAP := 6.0    # Velocidad de ajuste hacia la altura de vuelo (como LANE_SNAP, pero en Y)
+
 ## --- Nombres de las animaciones ---
 const ANIM_RUN := "mixamo_com"        # Nombre de la animación base al correr
 const ANIM_JUMP := "jump/mixamo_com"  # Nombre de la animación al saltar
@@ -28,12 +32,21 @@ const ANIM_ROLL := "roll/mixamo_com"  # Nombre de la animación al rodar/desliza
 signal died            # Señal enviada al morir el personaje
 signal coin_collected  # Señal enviada al recoger una moneda
 
+## --- Señales del sistema de power-ups (para que el HUD las use más adelante) ---
+signal powerup_activated(type: String, duration: float)
+signal powerup_ended(type: String)
+
 ## --- Estado interno ---
 var current_lane := 1     # Carril actual (0 = izquierda, 1 = centro, 2 = derecha)
 var is_rolling := false   # Define si el personaje está actualmente rodando
 var roll_timer := 0.0     # Temporizador para controlar la duración del rodamiento
 var is_dead := false      # Bloquea las colisiones y controles tras morir
 var is_jumping := false   # Indica si el personaje está en medio de un salto
+
+## --- Estado del power-up activo ---
+var active_powerup: String = ""        # "" = ninguno activo
+var powerup_timer: float = 0.0         # Segundos restantes del efecto activo
+var jump_force_multiplier: float = 1.0 # Lo usarán las botas de salto potenciado (ver TODO en activate_powerup)
 
 ## Medidas de la cápsula de pie. Se guardan al arrancar para poder
 ## restaurarlas después de encogerla durante el roll.
@@ -50,21 +63,31 @@ func _ready() -> void:
 	play_anim(ANIM_RUN)                               # Inicia la animación de correr por defecto
 
 
+# Cuenta regresiva del power-up activo, si hay alguno
+func _process(delta: float) -> void:
+	if active_powerup != "":                            # Si hay un power-up activo ahora mismo
+		powerup_timer -= delta                          # Descuenta el tiempo transcurrido
+		if powerup_timer <= 0.0:                        # Si se agotó el tiempo
+			_end_powerup()                              # Desactiva el efecto
+
+
 # Escucha la entrada de controles no procesada previamente por la interfaz (UI)
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("move_left"):            # Si presiona la tecla para mover a la izquierda
 		current_lane = maxi(current_lane - 1, 0)        # Cambia al carril izquierdo sin bajar de 0
 	elif event.is_action_pressed("move_right"):         # Si presiona la tecla para mover a la derecha
 		current_lane = mini(current_lane + 1, LANE_COUNT - 1) # Cambia al carril derecho sin superar el máximo
+	elif active_powerup == "jetpack":                   # Volando no se salta ni se rueda, solo se cambia de carril
+		return
 	elif event.is_action_pressed("jump") and not is_jumping: # Si presiona saltar y no está saltando
 		if is_rolling:                                  # Si presiona saltar mientras está rodando
 			cancel_roll()                               # Cancela el rodamiento inmediatamente
 			is_jumping = true                           # Activa el estado de salto
-			velocity.y = JUMP_VELOCITY                  # Aplica la fuerza del salto a la velocidad Y
+			velocity.y = JUMP_VELOCITY * jump_force_multiplier # Aplica la fuerza del salto (potenciado si hay botas)
 			start_jump()                                # Inicia la animación de salto
 		elif is_on_floor():                             # Si está firme sobre el suelo
 			is_jumping = true                           # Activa el estado de salto
-			velocity.y = JUMP_VELOCITY                  # Aplica la fuerza del salto a la velocidad Y
+			velocity.y = JUMP_VELOCITY * jump_force_multiplier # Aplica la fuerza del salto (potenciado si hay botas)
 			start_jump()                                # Inicia la animación de salto
 	elif event.is_action_pressed("roll") and not is_rolling: # Si presiona rodar y no está rodando
 		start_roll()                                    # Inicia la rutina de rodar
@@ -83,7 +106,12 @@ func _physics_process(delta: float) -> void:
 
 	var target_x := lane_to_x(current_lane)            # Obtiene la posición objetivo en X para el carril actual
 	velocity.x = (target_x - global_position.x) * LANE_SNAP # Calcula la velocidad horizontal requerida
-	velocity.y += get_gravity().y * delta               # Aplica la fuerza de la gravedad a la velocidad Y
+
+	if active_powerup == "jetpack":                     # Volando: ignora la gravedad, se ajusta hacia la altura de vuelo
+		velocity.y = (FLIGHT_HEIGHT - global_position.y) * FLIGHT_SNAP
+	else:
+		velocity.y += get_gravity().y * delta           # Aplica la fuerza de la gravedad a la velocidad Y
+
 	move_and_slide()                                    # Mueve el personaje ejecutando la física del motor
 
 	if was_airborne and is_on_floor():                  # Si el personaje acaba de aterrizar en el suelo
@@ -149,14 +177,22 @@ func lane_to_x(lane: int) -> float:
 func _on_hitbox_area_entered(area: Area3D) -> void:
 	if is_dead:                                         # Si el jugador ya está muerto
 		return                                          # Ignora el procesamiento de la colisión
-		
+
+	# Volando (jetpack), el jugador ignora todo lo del suelo — obstáculos,
+	# postes, paredes, Y también otros power-ups. El jetpack es exclusivo:
+	# mientras dura, nada más se recoge ni se activa. Las botas no tienen
+	# esta restricción: como el jugador sigue en el suelo, un power-up
+	# nuevo sí puede reemplazarlas con normalidad.
+	if active_powerup == "jetpack" and (area.is_in_group("obstacle") or area.is_in_group("pole") or area.is_in_group("wall") or area.is_in_group("powerup")):
+		return
+
 	if area.is_in_group("obstacle"):                    # Obstáculos mortales (trenes, vallas altas, etc.)
 		die()                                           # Muerte de un golpe
-		
+
 	elif area.is_in_group("pole"):                      # Poste específico (baja velocidad y te mueve de carril)
 		if get_parent().has_method("register_impact"):  # Llama a main.gd para bajar la velocidad general
 			get_parent().register_impact()
-		
+
 		# Lógica para empujar al jugador al carril libre sin sacarlo del mapa
 		if current_lane == 0:                           # Si chocó en el carril izquierdo
 			current_lane = 1                            # Lo empuja a salvo hacia el centro
@@ -171,10 +207,50 @@ func _on_hitbox_area_entered(area: Area3D) -> void:
 	elif area.is_in_group("wall"):                      # Paredes laterales de los 3 carriles
 		if get_parent().has_method("register_impact"):  # Llama a main.gd para bajar la velocidad
 			get_parent().register_impact()              # Tropieza, pero se queda en el mismo carril
-			
+
 	elif area.is_in_group("coin"):                      # Si la colisión es con una moneda
 		area.collect()                                  # Ejecuta la lógica propia de la moneda
 		coin_collected.emit()                           # Emite la señal de moneda recolectada hacia main.gd
+
+	elif area.is_in_group("powerup"):                   # Si la colisión es con un power-up (jetpack, botas...)
+		var p_type: String = area.powerup_type          # Lee qué tipo de power-up es
+		var p_duration: float = area.duration           # Lee cuánto debe durar su efecto
+		area.collect()                                  # Elimina el coleccionable del mundo
+		activate_powerup(p_type, p_duration)             # Activa el efecto correspondiente
+
+
+## Activa un power-up genérico durante un tiempo determinado. Si ya había
+## uno activo, este lo reemplaza (no se acumulan duraciones ni efectos).
+func activate_powerup(type: String, duration: float) -> void:
+	active_powerup = type
+	powerup_timer = duration
+
+	match type:
+		"jetpack":
+			play_anim(ANIM_RUN)  # Sigue corriendo en el aire: se ve más dinámico que una pose
+								  # de salto congelada, y evita que la luz de advertencia quede
+								  # visualmente "atrapada" dentro de esa pose recogida.
+			if has_node("WarningLight"):
+				get_node("WarningLight").flash_alert(Color(0.2, 0.6, 1.0), 5.5) # Destello azul, más intenso que el de monedas (3.0) para compensar que el azul se ve más débil a simple vista
+		# TODO (botas): cuando se implementen, agregar aquí:
+		# "boots":
+		#     jump_force_multiplier = 1.5
+
+	powerup_activated.emit(type, duration)
+
+
+## Termina el efecto del power-up activo y restaura los valores normales.
+func _end_powerup() -> void:
+	match active_powerup:
+		"jetpack":
+			anim.play(ANIM_RUN, 0.2, 1.0)  # Confirma que quede corriendo normal al aterrizar
+		# TODO (botas):
+		# "boots":
+		#     jump_force_multiplier = 1.0
+
+	powerup_ended.emit(active_powerup)
+	active_powerup = ""
+	powerup_timer = 0.0
 
 
 # Procesa la muerte del jugador, bloquea controles y notifica a main.gd
