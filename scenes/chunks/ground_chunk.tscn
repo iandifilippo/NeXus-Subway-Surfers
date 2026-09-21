@@ -1,0 +1,108 @@
+[gd_scene format=3 uid="uid://cd5qqqvvu536q"]
+
+[ext_resource type="Texture2D" uid="uid://cxdrhwsd8mtp7" path="res://assets/textures/ground_track.png" id="1_tex"]
+[ext_resource type="PackedScene" path="res://scenes/environment/grass_strip.tscn" id="2_grass"]
+[ext_resource type="PackedScene" path="res://scenes/environment/wall_segment.tscn" id="3_wall"]
+[ext_resource type="PackedScene" path="res://scenes/environment/bush_strip.tscn" id="4_bush"]
+[ext_resource type="PackedScene" path="res://scenes/environment/tree.tscn" id="5_tree"]
+[ext_resource type="PackedScene" path="res://scenes/environment/wire_segment.tscn" id="6_wire"]
+
+[sub_resource type="StandardMaterial3D" id="StdMat_ground"]
+albedo_texture = ExtResource("1_tex")
+uv1_scale = Vector3(2, 20, 1)
+texture_filter = 0
+
+[sub_resource type="BoxMesh" id="BoxMesh_cnqkh"]
+material = SubResource("StdMat_ground")
+size = Vector3(6, 0.5, 200)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cnqkh"]
+size = Vector3(60, 0.5, 200)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lewmy"]
+size = Vector3(0.15, 0.02, 200)
+
+[node name="Ground" type="StaticBody3D" unique_id=462981900]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=568035897]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, -30)
+mesh = SubResource("BoxMesh_cnqkh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1897336152]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -30)
+shape = SubResource("BoxShape3D_cnqkh")
+
+[node name="Stripe" type="MeshInstance3D" parent="." unique_id=57373420]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.01, -30)
+mesh = SubResource("BoxMesh_lewmy")
+
+[node name="Stripe2" type="MeshInstance3D" parent="." unique_id=2043291689]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.01, -30)
+mesh = SubResource("BoxMesh_lewmy")
+
+[node name="GrassLeft" parent="." unique_id=777443542 instance=ExtResource("2_grass")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, -0.15, -30)
+
+[node name="GrassRight" parent="." unique_id=245904788 instance=ExtResource("2_grass")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, -0.15, -30)
+
+[node name="WallLeft" parent="." unique_id=2052065139 instance=ExtResource("3_wall")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5, 2.5, -30)
+
+[node name="WallRight" parent="." unique_id=1819878485 instance=ExtResource("3_wall")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 2.5, -30)
+
+[node name="BushLeft" parent="." unique_id=976127245 instance=ExtResource("4_bush")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5, 5.4, -30)
+
+[node name="BushRight" parent="." unique_id=877417635 instance=ExtResource("4_bush")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 5.4, -30)
+
+[node name="Trees" type="Node3D" parent="." unique_id=1172318611]
+
+[node name="TreeL1" parent="Trees" unique_id=105556954 instance=ExtResource("5_tree")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.6, 6.6, -4)
+
+[node name="TreeR1" parent="Trees" unique_id=1786151485 instance=ExtResource("5_tree")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.6, 6.6, -4)
+
+[node name="TreeL2" parent="Trees" unique_id=254970090 instance=ExtResource("5_tree")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.6, 6.6, -14)
+
+[node name="TreeR2" parent="Trees" unique_id=774009567 instance=ExtResource("5_tree")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.6, 6.6, -14)
+
+[node name="TreeL3" parent="Trees" unique_id=107819795 instance=ExtResource("5_tree")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.6, 6.6, -24)
+
+[node name="TreeR3" parent="Trees" unique_id=183552859 instance=ExtResource("5_tree")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.6, 6.6, -24)
+
+[node name="TreeL4" parent="Trees" unique_id=1601004246 instance=ExtResource("5_tree")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.6, 6.6, -34)
+
+[node name="TreeR4" parent="Trees" unique_id=223455879 instance=ExtResource("5_tree")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.6, 6.6, -34)
+
+[node name="TreeL5" parent="Trees" unique_id=519066381 instance=ExtResource("5_tree")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.6, 6.6, -44)
+
+[node name="TreeR5" parent="Trees" unique_id=1697511890 instance=ExtResource("5_tree")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.6, 6.6, -44)
+
+[node name="TreeL6" parent="Trees" unique_id=1844566741 instance=ExtResource("5_tree")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.6, 6.6, -54)
+
+[node name="TreeR6" parent="Trees" unique_id=2031253210 instance=ExtResource("5_tree")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.6, 6.6, -54)
+
+[node name="Wires" type="Node3D" parent="." unique_id=1687390400]
+
+[node name="Wire1" parent="Wires" unique_id=1700950435 instance=ExtResource("6_wire")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.4, -14)
+
+[node name="Wire2" parent="Wires" unique_id=1546042199 instance=ExtResource("6_wire")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.2, -30)
+
+[node name="Wire3" parent="Wires" unique_id=583053603 instance=ExtResource("6_wire")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.4, -46)
