@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://cd5qqqvvu536q"]
 
 [ext_resource type="Texture2D" uid="uid://cxdrhwsd8mtp7" path="res://assets/textures/ground_track.png" id="1_tex"]
-[ext_resource type="PackedScene" path="res://scenes/environment/grass_strip.tscn" id="2_grass"]
-[ext_resource type="PackedScene" path="res://scenes/environment/wall_segment.tscn" id="3_wall"]
-[ext_resource type="PackedScene" path="res://scenes/environment/bush_strip.tscn" id="4_bush"]
+[ext_resource type="PackedScene" uid="uid://b2rp0g1ej4uay" path="res://scenes/environment/grass_strip.tscn" id="2_grass"]
+[ext_resource type="PackedScene" uid="uid://c873q1oaoxc0k" path="res://scenes/environment/wall_segment.tscn" id="3_wall"]
+[ext_resource type="PackedScene" uid="uid://b4qmae3c6t04u" path="res://scenes/environment/bush_strip.tscn" id="4_bush"]
 [ext_resource type="PackedScene" path="res://scenes/environment/tree.tscn" id="5_tree"]
-[ext_resource type="PackedScene" path="res://scenes/environment/wire_segment.tscn" id="6_wire"]
+[ext_resource type="PackedScene" uid="uid://c7iuwi66n2k2b" path="res://scenes/environment/wire_segment.tscn" id="6_wire"]
 
 [sub_resource type="StandardMaterial3D" id="StdMat_ground"]
 albedo_texture = ExtResource("1_tex")
@@ -106,3 +106,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.2, -30)
 
 [node name="Wire3" parent="Wires" unique_id=583053603 instance=ExtResource("6_wire")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.4, -46)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1144961756]
+transform = Transform3D(0.42875558, -0.46674556, 0.7735096, 0.1412291, 0.88030297, 0.45290288, -0.89231324, -0.08494258, 0.44335288, 0, 2.1212208, 0)
+light_color = Color(0.9233237, 0.66541004, 0.32604167, 1)
+light_energy = 0.208
