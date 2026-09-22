@@ -265,6 +265,14 @@ func _on_hitbox_area_entered(area: Area3D) -> void:
 	elif area.is_in_group("pole"):
 		_handle_solid_obstacle(area, POLE_FRONTAL_THRESHOLD, POLE_TOP_HEIGHT, POLE_LENGTH)
 
+	elif area.is_in_group("bar"):
+		# La barra alta solo se pasa agachado/rodando por debajo — no se
+		# puede saltar por encima (a propósito, para que el jugador use
+		# la acción de rodar). Si no estás rodando en el momento del
+		# contacto, mata directo.
+		if not is_rolling:
+			die()
+	
 	elif area.is_in_group("obstacle"):                  # Cualquier obstáculo sin tipo específico sigue matando directo
 		die()
 

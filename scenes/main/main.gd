@@ -24,6 +24,7 @@ const OBSTACLES: Array[PackedScene] = [
 	preload("res://scenes/obstacles/fence_low.tscn"),
 	preload("res://scenes/obstacles/fence_low.tscn"),
 	preload("res://scenes/obstacles/pole.tscn"),
+	preload("res://scenes/obstacles/bar_high.tscn"),
 	TRAIN_SCENE,
 ]
 
