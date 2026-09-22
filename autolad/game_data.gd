@@ -1,12 +1,13 @@
 ## Autoload (Singleton) — datos del jugador que sobreviven entre escenas
 ## mientras el juego está abierto: el total de monedas (la "billetera",
 ## gastable en la tienda), el mejor récord de distancia alcanzado, y si
-## ya se reclamó el regalo gratis de la tienda.
+## ya se reclamó el regalo gratis y cada caja de la tienda.
 ##
 ## IMPORTANTE: esto NO se guarda en disco. Se reinicia a cero (y el
-## regalo gratis vuelve a estar disponible) cada vez que se cierra el
-## juego por completo — es memoria compartida entre escenas durante
-## una misma sesión, no un sistema de guardado permanente.
+## regalo gratis y las cajas vuelven a estar disponibles) cada vez que
+## se cierra el juego por completo — es memoria compartida entre
+## escenas durante una misma sesión, no un sistema de guardado
+## permanente.
 extends Node
 
 ## Monedas acumuladas, disponibles para gastar en la tienda.
@@ -19,6 +20,11 @@ var best_distance: float = 0.0
 ## Al no guardarse en disco, vuelve a false automáticamente la próxima
 ## vez que se abra el juego.
 var daily_gift_claimed: bool = false
+
+## true si ya se compró cada caja en esta sesión, por su id ("small",
+## "large"). Igual que el regalo gratis: una vez por sesión, vuelve a
+## estar disponible al reabrir el juego, no hay temporizador.
+var crate_purchased: Dictionary = {}
 
 
 ## La llama main.gd cuando el jugador muere, con el resultado de la
@@ -51,3 +57,14 @@ func claim_daily_gift() -> int:
 	var reward := 20
 	total_coins += reward
 	return reward
+
+
+## true si esta caja ya se compró en esta sesión.
+func is_crate_purchased(crate_id: String) -> bool:
+	return crate_purchased.get(crate_id, false)
+
+
+## Registra que se acaba de comprar esta caja — no se podrá volver a
+## comprar hasta que se reabra el juego.
+func mark_crate_purchased(crate_id: String) -> void:
+	crate_purchased[crate_id] = true

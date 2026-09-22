@@ -122,11 +122,26 @@ func refresh_labels() -> void:
 		label.text = coin_text
 
 
-## Deja el botón de regalo gratis deshabilitado si ya se reclamó en
-## esta sesión. Se llama al abrir la tienda, no solo al arrancar el
-## juego, por si se reclamó y luego se navegó a otra pantalla.
+## Deja el botón de regalo gratis y los de las dos cajas deshabilitados
+## si ya se reclamaron/compraron en esta sesión. Se llama al abrir la
+## tienda, no solo al arrancar el juego, por si se compró algo y luego
+## se navegó a otra pantalla.
 func refresh_store() -> void:
 	free_gift_button.disabled = GameData.daily_gift_claimed
+	_update_crate_button(crate1_button, "small")
+	_update_crate_button(crate2_button, "large")
+
+
+## Deja un botón de caja listo para comprar ("Comprar", habilitado) o
+## ya usado ("Ya comprada", deshabilitado) según GameData, igual que ya
+## se hacía con el regalo gratis.
+func _update_crate_button(button: Button, crate_id: String) -> void:
+	if GameData.is_crate_purchased(crate_id):
+		button.disabled = true
+		button.text = "Ya comprada"
+	else:
+		button.disabled = false
+		button.text = "Comprar"
 
 
 ## Muestra únicamente la vista indicada y oculta las otras cinco.
@@ -207,24 +222,35 @@ func _on_free_gift_pressed() -> void:
 	refresh_store()
 
 
-## Compra la caja pequeña, si alcanzan las monedas.
+## Compra la caja pequeña, si alcanzan las monedas y no se había
+## comprado ya en esta sesión.
 func _on_buy_crate_small_pressed() -> void:
-	buy_crate(CRATE_SMALL_COST, CRATE_SMALL_REWARD)
+	buy_crate("small", CRATE_SMALL_COST, CRATE_SMALL_REWARD)
 
 
-## Compra la caja grande, si alcanzan las monedas.
+## Compra la caja grande, si alcanzan las monedas y no se había
+## comprado ya en esta sesión.
 func _on_buy_crate_large_pressed() -> void:
-	buy_crate(CRATE_LARGE_COST, CRATE_LARGE_REWARD)
+	buy_crate("large", CRATE_LARGE_COST, CRATE_LARGE_REWARD)
 
 
-## Lógica compartida por las dos cajas: intenta descontar el costo y,
-## si alcanzó, suma la recompensa. Es una economía decorativa (se paga
-## en monedas para recibir más monedas) porque todavía no hay
+## Lógica compartida por las dos cajas: revisa que no se haya comprado
+## ya esta sesión, intenta descontar el costo y, si alcanzó, suma la
+## recompensa y la marca como comprada. Es una economía decorativa (se
+## paga en monedas para recibir más monedas) porque todavía no hay
 ## potenciadores reales que vender.
-func buy_crate(cost: int, reward: int) -> void:
+func buy_crate(crate_id: String, cost: int, reward: int) -> void:
+	if GameData.is_crate_purchased(crate_id):
+		# El botón ya debería estar deshabilitado en este caso, pero se
+		# revisa igual por seguridad.
+		store_status_label.text = "Ya compraste esta caja en esta partida."
+		refresh_store()
+		return
 	if GameData.try_spend_coins(cost):
 		GameData.total_coins += reward
+		GameData.mark_crate_purchased(crate_id)
 		store_status_label.text = "¡Abriste la caja y ganaste %d monedas!" % reward
 	else:
 		store_status_label.text = "No tienes suficientes monedas."
 	refresh_labels()
+	refresh_store()
