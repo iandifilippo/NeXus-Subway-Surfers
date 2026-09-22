@@ -336,3 +336,13 @@ func lane_to_x(lane: int) -> float:
 func _unhandled_input(event: InputEvent) -> void:
 	if running and event.is_action_pressed("pause"):
 		pause_menu.open()
+		
+## Pausa automáticamente si la ventana pierde el foco o la pestaña del
+## navegador se oculta (cierra #23 y #24 — son, en la práctica, el
+## mismo caso: el jugador dejó de estar mirando el juego). Reutiliza el
+## mismo menú de pausa de siempre, no crea nada nuevo — simplemente lo
+## dispara sin que el jugador tenga que presionar P.
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT or what == NOTIFICATION_APPLICATION_PAUSED:
+		if running and not get_tree().paused:
+			pause_menu.open()
