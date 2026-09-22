@@ -75,8 +75,8 @@ var next_coin_spawn: float = 0.0
 var next_powerup_spawn: float = POWERUP_GAP
 var chunks: Array[Node3D] = []
 var blocked_lanes: Dictionary = {}
-var safe_lane: int = 1              # Carril que se mantiene libre de forma sostenida, varios ciclos seguidos
-var safe_lane_cycles_left: int = 0  # Cuántos ciclos más se mantiene igual antes de poder sortear otro
+var safe_lane: int = 1
+var safe_lane_cycles_left: int = 0
 
 ## --- Estado de tropiezo y choque ---
 var is_stumbled: bool = false
@@ -163,8 +163,8 @@ func register_impact() -> void:
 		is_stumbled = true
 		speed_multiplier = 0.5
 		stumble_timer.start()
-		if player.has_node("WarningLight"):        # Si el jugador tiene la luz de advertencia
-			player.get_node("WarningLight").flash_alert() # La hace destellar (color por defecto)
+		if player.has_node("WarningLight"):
+			player.get_node("WarningLight").flash_alert()
 
 		if player.has_method("play_stumble_anim"):
 			player.play_stumble_anim()
@@ -181,6 +181,8 @@ func prefill(z: float) -> void:
 		if lane == keep_free:
 			continue
 		if randf() < 0.6:
+			if _lane_has_nearby_coin(lane_to_x(lane), z):
+				continue
 			var scene: PackedScene = OBSTACLES.pick_random() as PackedScene
 			var obs: Node3D = scene.instantiate() as Node3D
 			add_child(obs)
@@ -193,10 +195,6 @@ func spawn_obstacle() -> void:
 		if blocked_lanes[lane] <= 0.0:
 			blocked_lanes.erase(lane)
 
-	# El carril "seguro" se mantiene el mismo varios ciclos seguidos, en
-	# vez de sortearse de nuevo cada vez — así el jugador tiene un tramo
-	# real para reaccionar, en vez de que el único carril libre cambie
-	# de golpe cada 18 metros.
 	if safe_lane_cycles_left <= 0:
 		safe_lane = randi() % 3
 		safe_lane_cycles_left = SAFE_LANE_DURATION
@@ -210,15 +208,19 @@ func spawn_obstacle() -> void:
 	if free_lanes.size() <= 1:
 		return
 
-	# El carril seguro normalmente está libre. Si por casualidad quedó
-	# bloqueado por un tren, se usa igual uno libre solo para este ciclo,
-	# sin gastar el contador de "cuántos ciclos lleva siendo seguro".
 	var keep_free: int = safe_lane if free_lanes.has(safe_lane) else free_lanes.pick_random() as int
 
 	for lane in free_lanes:
 		if lane == keep_free:
 			continue
 		if randf() < 0.6:
+			# Antes de colocar un obstáculo, revisa que no haya una
+			# moneda recién puesta justo ahí — sin esto, el ciclo de
+			# obstáculos (cada 18m) podía aparecer encima de monedas ya
+			# generadas por el ciclo de monedas (cada 45m), ya que antes
+			# solo las monedas evitaban los obstáculos, nunca al revés.
+			if _lane_has_nearby_coin(lane_to_x(lane), SPAWN_Z):
+				continue
 			var scene: PackedScene = OBSTACLES.pick_random() as PackedScene
 			var obs: Node3D = scene.instantiate() as Node3D
 			add_child(obs)
@@ -257,28 +259,20 @@ func spawn_powerup() -> void:
 	pu.position = Vector3(lane_to_x(lane), COIN_HEIGHT, SPAWN_Z)
 
 
-## Reacciona a cualquier power-up que se active en el jugador. Por ahora
-## solo el jetpack necesita hacer algo especial (generar su propia fila
-## de monedas aéreas), pero queda listo para que las botas u otro
-## power-up futuro reaccionen aquí también si algún día lo necesitan.
 func _on_powerup_activated(type: String, duration: float) -> void:
 	if type == "jetpack":
 		spawn_air_coin_line(duration)
 
 
-## Genera una fila de monedas en el aire, en zigzag (cambia de carril
-## cada 3 monedas, misma fórmula que el patrón "zigzag" normal), calculada
-## para que todas queden al alcance del jugador exactamente durante lo
-## que dura el vuelo — ni una se queda flotando después de que aterriza.
 func spawn_air_coin_line(duration: float) -> void:
 	var lane: int = randi() % 3
 	var coin_count: int = 12
-	var flight_distance: float = speed * duration # Metros que recorrerá el mundo mientras dura el vuelo
+	var flight_distance: float = speed * duration
 	var spacing: float = flight_distance / float(coin_count)
 	for i in coin_count:
 		@warning_ignore("integer_division")
 		var l: int = clampi(lane + (i / 3) % 3 - 1, 0, 2)
-		place_coin(l, AIR_COIN_HEIGHT, -5.0 - float(i) * spacing) # Empieza cerca (ya alcanzable) y se reparte hasta el final del vuelo
+		place_coin(l, AIR_COIN_HEIGHT, -5.0 - float(i) * spacing)
 
 
 func try_place_coin(lane: int, z: float, height: float = COIN_HEIGHT) -> void:
@@ -291,6 +285,21 @@ func try_place_coin(lane: int, z: float, height: float = COIN_HEIGHT) -> void:
 		if absf(child.position.z - z) < 8.0:
 			return
 	place_coin(lane, height, z)
+
+
+## Revisa si ya hay una moneda cerca de esta posición (mismo carril, a
+## menos de 8m en Z) — el "reverso" de lo que ya hacía try_place_coin()
+## con los obstáculos, para que la superposición se evite en ambos
+## sentidos, sin importar cuál de los dos ciclos generó primero.
+func _lane_has_nearby_coin(x: float, z: float) -> bool:
+	for child in get_children():
+		if not child.is_in_group("coin"):
+			continue
+		if absf(child.position.x - x) > 1.0:
+			continue
+		if absf(child.position.z - z) < 8.0:
+			return true
+	return false
 
 
 func place_coin(lane: int, height: float, z: float) -> void:
@@ -316,8 +325,8 @@ func _on_player_died() -> void:
 
 func _on_coin_collected() -> void:
 	coins += 1
-	if player.has_node("WarningLight"):        # Reutilizamos la misma luz
-		player.get_node("WarningLight").flash_alert() # Destella al recoger una moneda (color por defecto)
+	if player.has_node("WarningLight"):
+		player.get_node("WarningLight").flash_alert()
 
 
 func lane_to_x(lane: int) -> float:
