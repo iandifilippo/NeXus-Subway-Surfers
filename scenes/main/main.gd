@@ -15,8 +15,8 @@ const CHUNK_COUNT: int = 20
 
 ## --- Dificultad ---
 const START_SPEED: float = 12.0
-const MAX_SPEED: float = 32.0
-const ACCELERATION: float = 0.35
+const MAX_SPEED: float = 26.0    # Antes 32.0 — el techo se sentía demasiado rápido para partidas largas (issue #20)
+const ACCELERATION: float = 0.25 # Antes 0.35 — ritmo un poco más gradual hasta llegar al nuevo techo
 
 ## --- Obstáculos ---
 const TRAIN_SCENE := preload("res://scenes/obstacles/train.tscn")
