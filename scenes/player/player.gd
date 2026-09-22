@@ -28,6 +28,18 @@ const TRAIN_FRONTAL_THRESHOLD := 0.5   # El tren mide 1.8 de ancho
 const FENCE_FRONTAL_THRESHOLD := 0.4   # La valla mide 1.6 de ancho
 const POLE_FRONTAL_THRESHOLD := 0.1    # El poste mide solo 0.3 de ancho
 
+## --- Aterrizar/viajar encima de un obstáculo ---
+## Alturas reales de cada uno (tope superior) y su profundidad en Z —
+## esta última decide cuánto dura "viajando" encima antes de que el
+## obstáculo termine de pasar y el jugador caiga de vuelta al suelo.
+const FENCE_TOP_HEIGHT := 0.8
+const FENCE_LENGTH := 0.4      # Profundidad real de la valla — el viaje dura muy poco, es angosta
+const POLE_TOP_HEIGHT := 3.0
+const POLE_LENGTH := 0.3       # Profundidad real del poste — el viaje dura muy poco, es angosto
+const TRAIN_TOP_HEIGHT := 3.0
+const TRAIN_LENGTH := 12.0     # Debe coincidir con TRAIN_LENGTH en main.gd
+const CLEAR_HEIGHT_MARGIN := 0.15  # Margen de tolerancia para considerar que ya está "arriba"
+
 ## --- Nombres de las animaciones ---
 const ANIM_RUN := "mixamo_com"        # Nombre de la animación base al correr
 const ANIM_JUMP := "jump/mixamo_com"  # Nombre de la animación al saltar
@@ -57,6 +69,12 @@ var is_jumping := false   # Indica si el personaje está en medio de un salto
 var active_powerup: String = ""        # "" = ninguno activo
 var powerup_timer: float = 0.0         # Segundos restantes del efecto activo
 var jump_force_multiplier: float = 1.0 # Lo usarán las botas de salto potenciado (ver TODO en activate_powerup)
+
+## --- Estado de "viaje" encima de un obstáculo (tren, valla o poste) ---
+var is_riding: bool = false              # true mientras está parado/corriendo encima de algo
+var current_ride_area: Area3D = null     # A qué obstáculo está "pegado" ahora mismo
+var current_ride_top_height: float = 0.0 # A qué altura fija se mantiene mientras dura el viaje
+var current_ride_length: float = 0.0     # Profundidad en Z de ese obstáculo, para saber cuándo se acaba
 
 ## Medidas de la cápsula de pie. Se guardan al arrancar para poder
 ## restaurarlas después de encogerla durante el roll.
@@ -95,19 +113,24 @@ func _unhandled_input(event: InputEvent) -> void:
 			is_jumping = true                           # Activa el estado de salto
 			velocity.y = JUMP_VELOCITY * jump_force_multiplier # Aplica la fuerza del salto (potenciado si hay botas)
 			start_jump()                                # Inicia la animación de salto
-		elif is_on_floor():                             # Si está firme sobre el suelo
+		elif is_on_floor() or is_riding:                # Si está firme en el suelo real, o parado sobre algo
 			is_jumping = true                           # Activa el estado de salto
+			is_riding = false                           # Se baja de lo que estaba montando al saltar
+			current_ride_area = null
 			velocity.y = JUMP_VELOCITY * jump_force_multiplier # Aplica la fuerza del salto (potenciado si hay botas)
 			start_jump()                                # Inicia la animación de salto
 	elif event.is_action_pressed("roll") and not is_rolling: # Si presiona rodar y no está rodando
 		start_roll()                                    # Inicia la rutina de rodar
-		if not is_on_floor():                           # Si presiona rodar estando en el aire
+		if not is_on_floor() and not is_riding:         # Si presiona rodar estando en el aire de verdad
 			velocity.y = SLAM_VELOCITY                  # Aplica fuerza vertical hacia abajo para caer de golpe
 
 
 # Se ejecuta en el ciclo de actualización de física (60 veces por segundo)
 func _physics_process(delta: float) -> void:
 	var was_airborne := not is_on_floor()               # Registra si el jugador no estaba tocando el suelo en este frame
+
+	if is_riding:                                       # Si está montado sobre algo
+		_check_ride()                                   # Revisa si ya se acabó (el obstáculo ya pasó por completo)
 
 	if is_rolling:                                      # Si está actualmente en estado de rodar
 		roll_timer -= delta                             # Descuenta el tiempo transcurrido al temporizador
@@ -119,6 +142,9 @@ func _physics_process(delta: float) -> void:
 
 	if active_powerup == "jetpack":                     # Volando: ignora la gravedad, se ajusta hacia la altura de vuelo
 		velocity.y = (FLIGHT_HEIGHT - global_position.y) * FLIGHT_SNAP
+	elif is_riding:                                     # Montado en algo: fijo a su altura, sin gravedad
+		velocity.y = 0.0
+		global_position.y = current_ride_top_height
 	else:
 		velocity.y += get_gravity().y * delta           # Aplica la fuerza de la gravedad a la velocidad Y
 
@@ -130,13 +156,44 @@ func _physics_process(delta: float) -> void:
 			anim.play(ANIM_RUN, 0.1, 1.0)               # Vuelve a reproducir la animación de correr
 
 
+## Sube al jugador encima de un obstáculo: fija su altura al tope del
+## obstáculo e ignora la gravedad mientras dure el viaje, en vez de caer
+## atravesándolo. Sirve para tren, valla o poste por igual — solo
+## cambian los números que le pasa cada uno.
+func _start_riding(area: Area3D, top_height: float, length: float) -> void:
+	is_riding = true
+	current_ride_area = area
+	current_ride_top_height = top_height
+	current_ride_length = length
+	is_jumping = false        # Se considera "de pie", no en medio de un salto
+	velocity.y = 0.0
+	global_position.y = top_height
+	play_anim(ANIM_RUN)
+
+
+## Revisa cada frame si lo que se está montando ya pasó por completo
+## debajo del jugador. Recordar: el jugador siempre está fijo en Z=0, es
+## el mundo (y el obstáculo) el que se mueve en +Z hacia él.
+func _check_ride() -> void:
+	if current_ride_area == null or not is_instance_valid(current_ride_area):
+		is_riding = false                                # Ya no existe (se recicló/borró): se acabó el viaje
+		current_ride_area = null
+		return
+	var half_length: float = current_ride_length * 0.5
+	if current_ride_area.global_position.z - half_length > 0.0:
+		# El borde trasero ya pasó Z=0: ya no hay nada debajo, se suelta
+		# la sujeción y la gravedad retoma el control.
+		is_riding = false
+		current_ride_area = null
+
+
 # Maneja el arranque de la animación de salto y su pausa momentánea en el aire
 func start_jump() -> void:
 	if not anim.has_animation(ANIM_JUMP):               # Verifica si existe la animación de salto
 		return                                          # Si no existe, cancela la ejecución de la función
 	anim.play(ANIM_JUMP, 0.1, 1.5)                      # Reproduce la animación de salto acelerada
 	await get_tree().create_timer(0.35).timeout          # Pausa la ejecución de esta función por 0.35 segundos
-	if not is_on_floor():                               # Si transcurrido ese tiempo sigue en el aire
+	if not is_on_floor() and not is_riding:             # Si transcurrido ese tiempo sigue en el aire de verdad
 		anim.pause()                                    # Congela la animación de salto temporalmente
 
 
@@ -197,16 +254,16 @@ func _on_hitbox_area_entered(area: Area3D) -> void:
 		return
 
 	# Los tres tipos de obstáculo sólido (tren, valla, poste) comparten
-	# ahora la misma lógica: frente = muerte, lateral/diagonal = tropiezo
-	# + empujón hacia el carril libre más cercano.
+	# ahora la misma lógica: aterrizar encima = viajar sobre él; frente =
+	# muerte; lateral/diagonal = tropiezo + empujón al carril libre.
 	if area.is_in_group("train"):
-		_resolve_solid_hit(area, TRAIN_FRONTAL_THRESHOLD)
+		_handle_solid_obstacle(area, TRAIN_FRONTAL_THRESHOLD, TRAIN_TOP_HEIGHT, TRAIN_LENGTH)
 
 	elif area.is_in_group("fence"):
-		_resolve_solid_hit(area, FENCE_FRONTAL_THRESHOLD)
+		_handle_solid_obstacle(area, FENCE_FRONTAL_THRESHOLD, FENCE_TOP_HEIGHT, FENCE_LENGTH)
 
 	elif area.is_in_group("pole"):
-		_resolve_solid_hit(area, POLE_FRONTAL_THRESHOLD)
+		_handle_solid_obstacle(area, POLE_FRONTAL_THRESHOLD, POLE_TOP_HEIGHT, POLE_LENGTH)
 
 	elif area.is_in_group("obstacle"):                  # Cualquier obstáculo sin tipo específico sigue matando directo
 		die()
@@ -226,10 +283,15 @@ func _on_hitbox_area_entered(area: Area3D) -> void:
 		activate_powerup(p_type, p_duration)             # Activa el efecto correspondiente
 
 
-## Decide si un golpe contra un obstáculo sólido (tren, valla o poste)
-## fue de frente (mata) o lateral/diagonal (tropieza), según qué tan
-## centrado quedó el jugador respecto al obstáculo en el eje X.
-func _resolve_solid_hit(area: Area3D, threshold: float) -> void:
+## Decide qué hacer con un obstáculo sólido: si el jugador ya está a la
+## altura de su tope (o más arriba), se sube y viaja sobre él; si no,
+## decide entre golpe de frente (muerte) o lateral/diagonal (tropiezo +
+## empujón), según qué tan centrado quedó respecto al obstáculo en X.
+func _handle_solid_obstacle(area: Area3D, threshold: float, top_height: float, length: float) -> void:
+	if global_position.y >= top_height - CLEAR_HEIGHT_MARGIN:
+		_start_riding(area, top_height, length)
+		return
+
 	var offset_x: float = absf(area.global_position.x - global_position.x)
 	if offset_x < threshold:
 		die()
