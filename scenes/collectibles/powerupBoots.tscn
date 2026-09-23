@@ -2,7 +2,14 @@
 
 [ext_resource type="Script" uid="uid://bbd5p50fnmkfo" path="res://scenes/collectibles/powerup.gd" id="1_naoaf"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w3fi1"]
+albedo_color = Color(1, 0.5372549, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_naoaf"]
+albedo_color = Color(1, 0.49411765, 0, 1)
+
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_bm02b"]
+material = SubResource("StandardMaterial3D_naoaf")
 radius = 0.3
 height = 0.8
 
@@ -21,8 +28,10 @@ radius = 0.6
 collision_layer = 8
 script = ExtResource("1_naoaf")
 powerup_type = "boots"
+duration = 10.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=466289908]
+material_override = SubResource("StandardMaterial3D_w3fi1")
 mesh = SubResource("CapsuleMesh_bm02b")
 surface_material_override/0 = SubResource("StandardMaterial3D_7yjhc")
 
