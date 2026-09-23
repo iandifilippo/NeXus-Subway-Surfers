@@ -327,8 +327,8 @@ func _end_powerup() -> void:
 		"jetpack":
 			anim.play(ANIM_RUN, 0.2, 1.0)
 		# TODO (botas):
-		# "boots":
-		#     jump_force_multiplier = 1.0
+		"boots":
+			jump_force_multiplier = 1.0
 
 	powerup_ended.emit(active_powerup)
 	active_powerup = ""
