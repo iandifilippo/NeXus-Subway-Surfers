@@ -17,6 +17,8 @@ const SLAM_VELOCITY := -40.0  # Impulso descendente rápido para caer de golpe s
 ## --- Vuelo (jetpack) ---
 const FLIGHT_HEIGHT := 3.5  # Altura en Y a la que vuela el jugador, por encima de trenes/vallas
 const FLIGHT_SNAP := 6.0    # Velocidad de ajuste hacia la altura de vuelo (como LANE_SNAP, pero en Y)
+## --- Botas de salto ---
+const BOOTS_JUMP_MULTIPLIER := 1.5  # Multiplica la velocidad del salto; 1.5 ≈ 2.25x de altura
 
 ## --- Golpe frontal vs. lateral/diagonal contra obstáculos sólidos ---
 ## Si el golpe queda a menos de este valor del centro del obstáculo (en
