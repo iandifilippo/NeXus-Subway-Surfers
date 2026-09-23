@@ -308,6 +308,9 @@ func _push_to_free_lane(area: Area3D) -> void:
 
 
 func activate_powerup(type: String, duration: float) -> void:
+	if active_powerup != "":
+		_end_powerup()
+
 	active_powerup = type
 	powerup_timer = duration
 
