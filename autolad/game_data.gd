@@ -26,6 +26,10 @@ var daily_gift_claimed: bool = false
 ## estar disponible al reabrir el juego, no hay temporizador.
 var crate_purchased: Dictionary = {}
 
+## Id del personaje elegido en la pantalla "Yo" (ver main_menu.gd). Por
+## defecto "jake", el único desbloqueado por ahora.
+var selected_character: String = "jake"
+
 
 ## La llama main.gd cuando el jugador muere, con el resultado de la
 ## partida que acaba de terminar. Suma las monedas ganadas a la

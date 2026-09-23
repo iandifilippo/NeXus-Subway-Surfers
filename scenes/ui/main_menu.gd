@@ -35,11 +35,38 @@ extends Control
 @onready var daily_list: VBoxContainer = $MissionsPanel/DailyList
 @onready var season_list: VBoxContainer = $MissionsPanel/SeasonList
 
+## Pestañas de Misiones, guardadas aparte para poder resaltar cuál está
+## activa cada vez que se cambia de lista (issue #31).
+@onready var daily_tab_button: Button = $MissionsPanel/TabButtons/DailyTabButton
+@onready var season_tab_button: Button = $MissionsPanel/TabButtons/SeasonTabButton
+
 ## Nodos de la tienda.
 @onready var free_gift_button: Button = $StorePanel/ItemsBox/FreeGiftRow/FreeGiftButton
 @onready var crate1_button: Button = $StorePanel/ItemsBox/CrateRow1/Crate1Button
 @onready var crate2_button: Button = $StorePanel/ItemsBox/CrateRow2/Crate2Button
 @onready var store_status_label: Label = $StorePanel/ItemsBox/StatusLabel
+
+## Nodos de la pantalla "Yo" (selección de personaje).
+@onready var character_image: TextureRect = $MePanel/CharacterBox/CharacterImage
+@onready var character_name_label: Label = $MePanel/CharacterBox/CharacterNameLabel
+@onready var coming_soon_label: Label = $MePanel/CharacterBox/ComingSoonLabel
+@onready var selected_button: Button = $MePanel/CharacterBox/SelectedButton
+@onready var prev_char_button: Button = $MePanel/CharacterBox/CharacterCarousel/PrevButton
+@onready var next_char_button: Button = $MePanel/CharacterBox/CharacterCarousel/NextButton
+
+## Catálogo de personajes de la pantalla "Yo". Solo "jake" tiene arte
+## real disponible en el proyecto; los otros dos son placeholders
+## bloqueados para dejar el sistema listo para cuando existan (issue
+## #30 pedía que las flechas y los botones dejaran de estar congelados,
+## no arte nuevo).
+const CHARACTERS := [
+	{"id": "jake", "name": "Jake", "texture": preload("res://assets/models/player/ref2.png"), "unlocked": true},
+	{"id": "locked_1", "name": "Personaje 2", "texture": preload("res://assets/models/player/ref2.png"), "unlocked": false},
+	{"id": "locked_2", "name": "Personaje 3", "texture": preload("res://assets/models/player/ref2.png"), "unlocked": false},
+]
+
+## Índice del personaje que se está mostrando ahora mismo en el carrusel.
+var current_character_index: int = 0
 
 ## Costo y recompensa de cada caja. Es una economía simplificada y
 ## decorativa (pagas monedas para recibir más monedas) porque el juego
@@ -94,6 +121,17 @@ func _ready() -> void:
 	free_gift_button.pressed.connect(_on_free_gift_pressed)
 	crate1_button.pressed.connect(_on_buy_crate_small_pressed)
 	crate2_button.pressed.connect(_on_buy_crate_large_pressed)
+
+	# Carrusel de personajes de la pantalla "Yo".
+	prev_char_button.pressed.connect(_on_char_prev_pressed)
+	next_char_button.pressed.connect(_on_char_next_pressed)
+	selected_button.pressed.connect(_on_select_character_pressed)
+	current_character_index = _find_character_index(GameData.selected_character)
+	_refresh_character_view()
+
+	_setup_home_background()
+	_setup_play_button()
+	_setup_missions_style()
 
 	show_only(home_view)
 
@@ -174,6 +212,7 @@ func _on_missions_pressed() -> void:
 
 
 func _on_me_pressed() -> void:
+	_refresh_character_view()
 	show_only(me_panel)
 
 
@@ -202,6 +241,8 @@ func _on_config_close_pressed() -> void:
 func _on_daily_tab_pressed() -> void:
 	daily_list.show()
 	season_list.hide()
+	_style_tab(daily_tab_button, true)
+	_style_tab(season_tab_button, false)
 
 
 ## Pestaña "Objetivo Temporada": muestra la lista de temporada y oculta
@@ -209,6 +250,163 @@ func _on_daily_tab_pressed() -> void:
 func _on_season_tab_pressed() -> void:
 	daily_list.hide()
 	season_list.show()
+	_style_tab(daily_tab_button, false)
+	_style_tab(season_tab_button, true)
+
+
+## --- Issue #32: fondo plano y botón de jugar sin prominencia ---
+
+## Reemplaza el ColorRect casi invisible por un degradado (sin depender
+## de un asset ilustrativo nuevo), para que la pantalla de inicio deje
+## de verse como un gris plano vacío.
+func _setup_home_background() -> void:
+	var gradient := Gradient.new()
+	gradient.colors = PackedColorArray([
+		Color(0.06, 0.08, 0.2),
+		Color(0.16, 0.06, 0.24),
+	])
+	var texture := GradientTexture2D.new()
+	texture.gradient = gradient
+	texture.fill = GradientTexture2D.FILL_LINEAR
+	texture.fill_from = Vector2(0.5, 0.0)
+	texture.fill_to = Vector2(0.5, 1.0)
+	$Background.texture = texture
+
+
+## Le da al botón central un color de acento, esquinas redondeadas y una
+## animación de pulso continua para que llame la atención desde el
+## primer contacto, en vez de ser un botón más entre otros.
+func _setup_play_button() -> void:
+	var button: Button = $HomeView/PlayButton
+
+	var normal_style := StyleBoxFlat.new()
+	normal_style.bg_color = Color(0.95, 0.4, 0.1)
+	normal_style.set_corner_radius_all(18)
+	normal_style.shadow_size = 10
+	normal_style.shadow_color = Color(0, 0, 0, 0.35)
+
+	var hover_style := normal_style.duplicate()
+	hover_style.bg_color = normal_style.bg_color.lightened(0.12)
+
+	var pressed_style := normal_style.duplicate()
+	pressed_style.bg_color = normal_style.bg_color.darkened(0.12)
+
+	button.add_theme_stylebox_override("normal", normal_style)
+	button.add_theme_stylebox_override("hover", hover_style)
+	button.add_theme_stylebox_override("pressed", pressed_style)
+	button.add_theme_color_override("font_color", Color(1, 1, 1))
+
+	# El pivote tiene que quedar en el centro del botón para que el
+	# pulso escale hacia adentro/afuera en vez de desplazarse.
+	await get_tree().process_frame
+	button.pivot_offset = button.size / 2.0
+
+	var tween := create_tween().set_loops()
+	tween.tween_property(button, "scale", Vector2(1.05, 1.05), 0.7)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.tween_property(button, "scale", Vector2(1.0, 1.0), 0.7)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+
+## --- Issue #31: falta de jerarquía visual y lecturabilidad en Misiones ---
+
+## Sube el contraste del panel de Misiones (fondo oscuro semitransparente
+## en vez de casi invisible, texto claro, botones "Vamos" más grandes) y
+## dobla las pestañas en un ButtonGroup para que la activa quede resaltada.
+func _setup_missions_style() -> void:
+	var panel_bg: ColorRect = $MissionsPanel/ColorRect
+	panel_bg.color = Color(0.05, 0.06, 0.1, 0.75)
+
+	var title: Label = $MissionsPanel/Header/TitleLabel
+	title.add_theme_color_override("font_color", Color(1, 1, 1))
+	title.add_theme_font_size_override("font_size", 26)
+
+	for list in [daily_list, season_list]:
+		for row in list.get_children():
+			var desc: Label = row.get_node("DescLabel")
+			desc.add_theme_color_override("font_color", Color(0.95, 0.95, 0.95))
+			desc.add_theme_font_size_override("font_size", 16)
+			var go_button: Button = row.get_node("GoButton")
+			go_button.custom_minimum_size = Vector2(96, 40)
+			go_button.add_theme_font_size_override("font_size", 16)
+
+	var tab_group := ButtonGroup.new()
+	daily_tab_button.toggle_mode = true
+	season_tab_button.toggle_mode = true
+	daily_tab_button.button_group = tab_group
+	season_tab_button.button_group = tab_group
+	daily_tab_button.button_pressed = true
+	_style_tab(daily_tab_button, true)
+	_style_tab(season_tab_button, false)
+
+
+## Resalta la pestaña activa (más grande y en color de acento) y atenúa
+## la inactiva, para que siempre sea obvio cuál lista se está viendo.
+func _style_tab(tab: Button, active: bool) -> void:
+	if active:
+		tab.add_theme_color_override("font_color", Color(1.0, 0.85, 0.2))
+		tab.add_theme_font_size_override("font_size", 16)
+	else:
+		tab.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7))
+		tab.add_theme_font_size_override("font_size", 14)
+
+
+## Busca en CHARACTERS el índice del personaje con este id (el que venga
+## de GameData.selected_character). Si no lo encuentra, empieza en 0.
+func _find_character_index(character_id: String) -> int:
+	for i in CHARACTERS.size():
+		if CHARACTERS[i].id == character_id:
+			return i
+	return 0
+
+
+## --- Issue #30: selección de personaje sin interactividad en "Yo" ---
+
+## Flecha "<": retrocede al personaje anterior, dando la vuelta al llegar
+## al primero.
+func _on_char_prev_pressed() -> void:
+	current_character_index = wrapi(current_character_index - 1, 0, CHARACTERS.size())
+	_refresh_character_view()
+
+
+## Flecha ">": avanza al siguiente personaje, dando la vuelta al llegar
+## al último.
+func _on_char_next_pressed() -> void:
+	current_character_index = wrapi(current_character_index + 1, 0, CHARACTERS.size())
+	_refresh_character_view()
+
+
+## Botón principal del carrusel: solo hace algo si el personaje mostrado
+## está desbloqueado y no es ya el que está en uso. Guarda la elección en
+## GameData para que se recuerde mientras dure la sesión.
+func _on_select_character_pressed() -> void:
+	var data: Dictionary = CHARACTERS[current_character_index]
+	if not data.unlocked or data.id == GameData.selected_character:
+		return
+	GameData.selected_character = data.id
+	_refresh_character_view()
+
+
+## Redibuja el carrusel completo: imagen, nombre, y el botón en uno de
+## sus tres estados ("Seleccionar", "En uso" o "Bloqueado"), según el
+## personaje que toque mostrar y cuál esté elegido en GameData.
+func _refresh_character_view() -> void:
+	var data: Dictionary = CHARACTERS[current_character_index]
+
+	character_image.texture = data.texture
+	character_image.modulate = Color(1, 1, 1) if data.unlocked else Color(0.35, 0.35, 0.35)
+	character_name_label.text = data.name if data.unlocked else "🔒 %s" % data.name
+	coming_soon_label.visible = not data.unlocked
+
+	if not data.unlocked:
+		selected_button.text = "Bloqueado"
+		selected_button.disabled = true
+	elif data.id == GameData.selected_character:
+		selected_button.text = "En uso"
+		selected_button.disabled = true
+	else:
+		selected_button.text = "Seleccionar"
+		selected_button.disabled = false
 
 
 ## Botón "Reclamar" del regalo gratis. GameData decide si ya se había
