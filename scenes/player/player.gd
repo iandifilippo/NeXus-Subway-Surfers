@@ -316,9 +316,8 @@ func activate_powerup(type: String, duration: float) -> void:
 			play_anim(ANIM_RUN)
 			if has_node("WarningLight"):
 				get_node("WarningLight").flash_alert(Color(0.2, 0.6, 1.0), 5.5)
-		# TODO (botas):
-		# "boots":
-		#     jump_force_multiplier = 1.5
+		"boots":
+			jump_force_multiplier = BOOTS_JUMP_MULTIPLIER
 
 	powerup_activated.emit(type, duration)
 
