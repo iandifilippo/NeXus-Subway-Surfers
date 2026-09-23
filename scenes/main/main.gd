@@ -41,6 +41,7 @@ const AIR_COIN_HEIGHT: float = 3.5   # Debe coincidir con FLIGHT_HEIGHT en playe
 ## --- Power-ups ---
 const POWERUPS: Array[PackedScene] = [ # Lista de power-ups disponibles, mismo patrón que OBSTACLES: agregar uno es agregar una línea aquí
 	preload("res://scenes/collectibles/powerupJetpack.tscn"),
+	preload("res://scenes/collectibles/powerupBoots.tscn"),
 	# Cuando existan las botas, se agregan aquí:
 	# preload("res://scenes/collectibles/powerup_boots.tscn"),
 ]
