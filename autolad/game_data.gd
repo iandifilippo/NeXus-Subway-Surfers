@@ -3,11 +3,10 @@
 ## gastable en la tienda), el mejor récord de distancia alcanzado, y si
 ## ya se reclamó el regalo gratis y cada caja de la tienda.
 ##
-## IMPORTANTE: esto NO se guarda en disco. Se reinicia a cero (y el
-## regalo gratis y las cajas vuelven a estar disponibles) cada vez que
-## se cierra el juego por completo — es memoria compartida entre
-## escenas durante una misma sesión, no un sistema de guardado
-## permanente.
+## IMPORTANTE: esto NO se guarda en disco. Se reinicia a cero (y todo
+## vuelve a estar disponible) cada vez que se cierra el juego por
+## completo — es memoria compartida entre escenas durante una misma
+## sesión, no un sistema de guardado permanente.
 extends Node
 
 ## Monedas acumuladas, disponibles para gastar en la tienda.
@@ -30,12 +29,31 @@ var crate_purchased: Dictionary = {}
 ## defecto "jake", el único desbloqueado por ahora.
 var selected_character: String = "jake"
 
+## --- Estadísticas para las misiones ---
+## Monedas recolectadas en total, sumando TODAS las partidas de esta
+## sesión — a diferencia de total_coins, esta nunca baja al gastar en
+## la tienda, porque una misión de "recoge X monedas" no debería
+## deshacerse por haber comprado algo.
+var lifetime_coins: int = 0
+
+## Suma de la distancia de TODAS las partidas jugadas en esta sesión
+## (a diferencia de best_distance, que solo guarda la mejor).
+var total_distance_traveled: float = 0.0
+
+## Cuántas partidas se han jugado (terminado, por muerte) en esta
+## sesión.
+var runs_played: int = 0
+
 
 ## La llama main.gd cuando el jugador muere, con el resultado de la
 ## partida que acaba de terminar. Suma las monedas ganadas a la
-## billetera y actualiza el récord si corresponde.
+## billetera y a las estadísticas de misiones, actualiza el récord si
+## corresponde, y cuenta la partida jugada.
 func report_run_result(distance: float, coins_earned: int) -> void:
 	total_coins += coins_earned
+	lifetime_coins += coins_earned
+	total_distance_traveled += distance
+	runs_played += 1
 	if distance > best_distance:
 		best_distance = distance
 
@@ -72,3 +90,19 @@ func is_crate_purchased(crate_id: String) -> bool:
 ## comprar hasta que se reabra el juego.
 func mark_crate_purchased(crate_id: String) -> void:
 	crate_purchased[crate_id] = true
+
+
+## Devuelve el valor actual de una estadística por su nombre, para que
+## main_menu.gd pueda calcular el progreso de cualquier misión sin
+## tener que conocer cada variable por separado — solo el nombre.
+func get_stat(stat_name: String) -> float:
+	match stat_name:
+		"lifetime_coins":
+			return float(lifetime_coins)
+		"best_distance":
+			return best_distance
+		"total_distance_traveled":
+			return total_distance_traveled
+		"runs_played":
+			return float(runs_played)
+	return 0.0
