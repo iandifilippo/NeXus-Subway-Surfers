@@ -2,11 +2,6 @@
 ## cinco paneles a pantalla completa (Misiones, Yo, Tienda,
 ## Configuración, Cómo jugar) que se muestran uno a la vez, nunca
 ## superpuestos.
-##
-## Misiones, Yo y Tienda tienen su contenido final (con datos y
-## economía simplificados, sin sistemas reales detrás). Configuración
-## es un placeholder puramente visual. Cómo jugar es una lista fija de
-## controles del juego.
 extends Control
 
 ## Referencia a las 6 "vistas" posibles. show_only() se encarga de que
@@ -76,6 +71,26 @@ const CRATE_SMALL_REWARD := 80
 const CRATE_LARGE_COST := 150
 const CRATE_LARGE_REWARD := 220
 
+## --- Misiones reales, basadas en estadísticas del juego ---
+## "Diaria" y "Temporada" son solo dos categorías visuales — como el
+## proyecto no guarda nada en disco (ver GameData), ninguna se
+## reinicia de verdad por día ni por temporada: ambas viven mientras
+## dure la sesión. El botón "Vamos" siempre está activo — lleva al
+## Home para que el jugador entre a una partida por su cuenta; el
+## progreso se actualiza solo leyendo GameData.get_stat(), y al
+## cumplirse la meta el botón pasa a "Completado" (checklist, sin
+## recompensa en monedas).
+const MISSIONS_DAILY := [
+	{"id": "daily_coins_50", "desc": "Recoge 50 monedas", "stat": "lifetime_coins", "target": 50.0},
+	{"id": "daily_distance_500", "desc": "Recorre 500 metros en una partida", "stat": "best_distance", "target": 500.0},
+	{"id": "daily_coins_100", "desc": "Recoge 100 monedas", "stat": "lifetime_coins", "target": 100.0},
+]
+const MISSIONS_SEASON := [
+	{"id": "season_coins_1000", "desc": "Recoge 1000 monedas", "stat": "lifetime_coins", "target": 1000.0},
+	{"id": "season_distance_5000", "desc": "Recorre 5000 metros acumulados", "stat": "total_distance_traveled", "target": 5000.0},
+	{"id": "season_runs_10", "desc": "Juega 10 partidas", "stat": "runs_played", "target": 10.0},
+]
+
 ## Qué vista estaba abierta antes de entrar a Configuración. Se usa
 ## para que la X de Configuración vuelva justo ahí, en vez de siempre
 ## al inicio — así, si abres Configuración desde Misiones, la X te
@@ -117,6 +132,16 @@ func _ready() -> void:
 	$MissionsPanel/TabButtons/DailyTabButton.pressed.connect(_on_daily_tab_pressed)
 	$MissionsPanel/TabButtons/SeasonTabButton.pressed.connect(_on_season_tab_pressed)
 
+	# Botones "Vamos" de cada misión, diaria y de temporada — todos
+	# hacen lo mismo (cierran Misiones y dejan al jugador en el Home),
+	# así que se conectan todos a la misma función.
+	for i in MISSIONS_DAILY.size():
+		var daily_row: HBoxContainer = daily_list.get_node("MissionRow%d" % (i + 1))
+		daily_row.get_node("GoButton").pressed.connect(_on_mission_go_pressed)
+	for i in MISSIONS_SEASON.size():
+		var season_row: HBoxContainer = season_list.get_node("MissionRow%d" % (i + 1))
+		season_row.get_node("GoButton").pressed.connect(_on_mission_go_pressed)
+
 	# Botones de la tienda.
 	free_gift_button.pressed.connect(_on_free_gift_pressed)
 	crate1_button.pressed.connect(_on_buy_crate_small_pressed)
@@ -132,6 +157,7 @@ func _ready() -> void:
 	_setup_home_background()
 	_setup_play_button()
 	_setup_missions_style()
+	refresh_missions()
 
 	show_only(home_view)
 
@@ -182,11 +208,45 @@ func _update_crate_button(button: Button, crate_id: String) -> void:
 		button.text = "Comprar"
 
 
+## Actualiza el texto y el botón "Vamos"/"Completado" de cada fila de
+## misión, diarias y de temporada, leyendo el progreso real desde
+## GameData. Se llama al entrar a Misiones y al volver de una partida.
+func refresh_missions() -> void:
+	_refresh_mission_list(MISSIONS_DAILY, daily_list)
+	_refresh_mission_list(MISSIONS_SEASON, season_list)
+
+
+## Recorre una lista de misiones (diarias o de temporada) y actualiza
+## su fila correspondiente: el texto con el progreso actual sobre la
+## meta, y el botón — "Vamos" si falta progreso, "Completado"
+## (deshabilitado, solo checklist) si ya se cumplió.
+func _refresh_mission_list(missions: Array, list: VBoxContainer) -> void:
+	for i in missions.size():
+		var mission: Dictionary = missions[i]
+		var row: HBoxContainer = list.get_node("MissionRow%d" % (i + 1))
+		var desc_label: Label = row.get_node("DescLabel")
+		var go_button: Button = row.get_node("GoButton")
+
+		var progress: float = GameData.get_stat(mission.stat)
+		var target: float = mission.target
+		var shown_progress: int = int(minf(progress, target))
+		desc_label.text = "%s (%d/%d)" % [mission.desc, shown_progress, int(target)]
+
+		if progress >= target:
+			go_button.text = "Completado"
+			go_button.disabled = true
+		else:
+			go_button.text = "Vamos"
+			go_button.disabled = false
+
+
 ## Muestra únicamente la vista indicada y oculta las otras cinco.
 func show_only(view: Control) -> void:
 	refresh_labels()
 	if view == store_panel:
 		refresh_store()
+	if view == missions_panel:
+		refresh_missions()
 	home_view.visible = (view == home_view)
 	missions_panel.visible = (view == missions_panel)
 	me_panel.visible = (view == me_panel)
@@ -452,3 +512,10 @@ func buy_crate(crate_id: String, cost: int, reward: int) -> void:
 		store_status_label.text = "No tienes suficientes monedas."
 	refresh_labels()
 	refresh_store()
+
+
+## Botón "Vamos" de cualquier misión: cierra el panel de Misiones y
+## deja al jugador en el menú principal, listo para darle a "Toca para
+## jugar" por su cuenta.
+func _on_mission_go_pressed() -> void:
+	show_only(home_view)
